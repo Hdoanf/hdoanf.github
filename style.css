@@ -86,3 +86,145 @@ button:hover {
     border-style: none;
 
 }
+/* dang nhap dang ky  */
+html {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+body {
+    background-image: url("https://img.thuthuatphanmem.vn/uploads/2018/09/27/anh-nen-cho-may-tinh-4k_105908365.jpg");
+    background-size: 100%;
+}
+/* cho thẻ login ở chính giữa  */
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6% 0px 3% 0px;
+}
+/* thẻ login   */
+#logincard {
+    width: 315px;
+    height: 558px;
+    border-radius: 12px;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(59, 7, 88, .2);
+}
+/* khối chứa tiêu đề login  */
+h1 {
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+
+}
+/* tiêu đề login  */
+.title {
+    margin: 40px;
+    display: flex;
+    justify-content: center;
+}
+/* tên đăng nhập */
+.name {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 10px;
+    border-bottom: 1px solid #000000;
+    width: 90%;
+
+
+}
+
+.name:focus {
+    outline: none;
+    box-shadow: 2px 2px 0 0 rgba(29, 27, 31, 0.3);
+}
+
+/*  mật khẩu */
+.pass {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 10px;
+    border-bottom: 1px solid #000000;
+    width: 90%;
+}
+
+.pass:focus {
+    outline: none;
+    /* tạo hiệu ứng nổi */
+    box-shadow: 2px 2px 0 0 rgba(29, 27, 31, 0.3);
+
+}
+
+label {
+    font-size: 17px;
+    margin-left: 10px;
+}
+
+input {
+    margin: 8px;
+    height: 15px;
+}
+
+/*  nút đăng nhập */
+.button {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* nút đăng nhập */
+input[type="submit"] {
+    width: 40%;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-size: 15px;
+    border: none;
+
+}
+
+/* phần đăng ký  */
+.footer {
+    text-align: center;
+    margin-top: 30px;
+
+    .signup {
+
+        text-decoration: none;
+    }
+}
+
+/* thẻ đăng ký */
+.signupcard {
+    width: 319px;
+    height: 558px;
+    border-radius: 12px;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(59, 7, 88, .2);
+
+}
+
+/* thẻ email */
+
+.email {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 10px;
+    border-bottom: 1px solid #000000;
+    width: 90%;
+}
+
+.email:focus {
+
+    outline: none;
+    box-shadow: 2px 2px 0 0 rgba(29, 27, 31, 0.3);
+}
+
+.error {
+    float: right;
+    color: rgb(90, 51, 38);
+    margin-right: 25px;
+}
