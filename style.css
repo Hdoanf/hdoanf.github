@@ -87,13 +87,7 @@ button:hover {
 
 }
 /* dang nhap dang ky  */
-html {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-body {
-    background-image: url("https://img.thuthuatphanmem.vn/uploads/2018/09/27/anh-nen-cho-may-tinh-4k_105908365.jpg");
-    background-size: 100%;
-}
+
 /* cho thẻ login ở chính giữa  */
 .form {
     display: flex;
