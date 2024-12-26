@@ -12,9 +12,8 @@ if(isset($_POST["usn"]) && isset($_POST["pass"])){
     if($result->num_rows > 0){
         $phanquyen = $result->fetch_assoc();
         $phanquyen = $phanquyen["quyenhan"];
-        if($phanquyen["quyenhan"] == "1"){
+        if($phanquyen == "User"){
             header("Location: nguoidung.php");
-            exit();
         }else{
             header("Location: admin.php");
         }

@@ -6,33 +6,34 @@ $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
 $search = "";
 $loaits = "";
-$tinh_trang="";
-$sql="SELECT * FROM full_information";
+$tinh_trang = "";
+$sql = "SELECT * FROM `full_information`";
+$sql = "SELECT * FROM `full_information` WHERE 1=1";
+
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
     $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
     $tinh_trang = isset($_GET['tinhtrang']) ? trim($_GET['tinhtrang']) : '';
     // lấy id của bảng product
     if (!empty($search)) {
-            $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
-            if ($tts->num_rows > 0) {
-                $tts2 = $tts->fetch_assoc();
-                $tentk = $tts2["id_product"];//lấy id của bảng product ứng với tên là biển seach
-                echo "<script>console.log('$tentk')</script>"; 
-                $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
-            }else{
-                $sql ="SELECT * FROM `full_information` WHERE 0";
-            }
-        }
-        if (!empty($loaits)) {
-            $sql .= " AND `product_category` = '$loaits'";//nối
-        }
-        if (!empty($tinh_trang)) {
-            $sql .= " AND `product_status` = '$tinh_trang'";
+        $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
+        if ($tts->num_rows > 0) {
+            $tts2 = $tts->fetch_assoc();
+            $tentk = $tts2["id_product"];//lấy id của bảng product ứng với tên là biển seach
+            echo "<script>console.log('$tentk')</script>";
+            $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
+        } else {
+            $sql = "SELECT * FROM `full_information` WHERE 0";
         }
     }
+    if (!empty($loaits)) {
+        $sql .= " AND `product_category` = '$loaits'";//nối
+    }
+    if (!empty($tinh_trang)) {
+        $sql .= " AND `product_status` = '$tinh_trang'";
+    }
+}
 $kq = $conn->query($sql);
-
 
 ?>
 
@@ -50,12 +51,12 @@ $kq = $conn->query($sql);
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
                     height="30" class="d-inline-block align-text-top me-2" alt="Logo">
-                Quản lý tài sản
+                Quản lý tài sản của admin
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -66,7 +67,17 @@ $kq = $conn->query($sql);
                         <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+                        <div class="dropdown dropstart text-end">
+                            <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle mb-0 ms-2 "></i>
+                                <p class="mb-0 ms-2">Xin chào</p>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Thông tin</a></li>
+                                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -80,16 +91,16 @@ $kq = $conn->query($sql);
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
-                                <i class="bi bi-grid-1x2"></i> Tài sản 
+                                <i class="bi bi-grid-1x2"></i> Tài sản
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
-                                Chức năng 1
+                            <a class="nav-link" href="quanlynguoidung.php">
+                                Quản lý người dùng
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="them.php">
                                 Chức năng 2
                             </a>
                         </li>
@@ -127,7 +138,7 @@ $kq = $conn->query($sql);
                                         WHERE `id_category`=" . $rowloai['product_category'] . "");
                                             $rownameloai = $kqloai->fetch_assoc();
                                             $select = ($rowloai['product_category'] == $loaits) ? "selected" : "";
-                                            echo "<script>console.log('$select')</script>";
+                                            // echo "<script>console.log('$select')</script>";
                                             echo "<option value='" . $rowloai['product_category'] . "' $select >
                                             " . $rownameloai['name_category'] . "</option>";
                                         }
@@ -142,20 +153,23 @@ $kq = $conn->query($sql);
                                     $tinhtrang = $conn->query("SELECT DISTINCT `product_status` FROM full_information");
                                     if ($tinhtrang->num_rows > 0) {
                                         while ($rowtinhtrang = $tinhtrang->fetch_assoc()) {
-                                            $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";    
+                                            $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";
                                             echo "<option value='" . $rowtinhtrang['product_status'] . "' $select2 >
-                                            ".$rowtinhtrang['product_status']. "</option>";
+                                            " . $rowtinhtrang['product_status'] . "</option>";
                                         }
                                     }
                                     ?>
                                 </select>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="them.php" class="btn btn-primary w-100">Thêm</a>
                             </div>
                             <div class="row g-2 mb-4">
                                 <div class="col-md-2">
                                     <button type="submit" class="btn btn-primary w-100">Tìm kiếm </button>
                                 </div>
                                 <div class="col-md-1">
-                                   <a href="nguoidung.php" class="btn btn-danger w-100">Xóa</a>
+                                    <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
                                 </div>
                             </div>
 
@@ -224,7 +238,11 @@ $kq = $conn->query($sql);
                                             $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
                                             echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
                                             echo "<td>" . $row["product_information"] . "</td>";
-                                            echo "<td><a class='btn btn-sm btn-outline-primary' href='chitiet.php?id=" . $row["barcode"] . "'><i class='bi bi-eye'></i></a></td>";
+                                            echo "<td><a class='btn btn-sm btn-outline-primary' href='chitiet.php?id=" . $row["barcode"] . "'><i class='bi bi-eye'></i></a>
+                                            <a class='btn btn-sm btn-outline-warning' href='sua.php?id=" . $row["barcode"] . "'><i class='bi bi-pencil-square'></i></a>
+                                            <a class='btn btn-sm btn-outline-danger' href='xoa.php?id=" . $row["barcode"] . "'><i class='bi bi-trash-fill'></i></a>
+                                            
+                                            </td>";
                                             echo "</tr>";
                                             $tt++;
                                         }
@@ -246,7 +264,6 @@ $kq = $conn->query($sql);
             <span class="text-muted">Phần mềm quản lý tài sản</span>
         </div>
     </footer> -->
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
