@@ -53,7 +53,7 @@ $kq = $conn->query($sql);
         <div class="row">
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
+                    <ul class="nav flex-column nav-pills">
                         <li class="nav-item">
                             <a class="nav-link " href="admin.php">
                                 <i class="bi bi-grid-1x2"></i> Tài sản
@@ -79,7 +79,7 @@ $kq = $conn->query($sql);
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="card mt-4">
+                <div class="card mt-4">
                     <div class="card-body">
                         <div class="d-flex justify-content-start align-items-center">
                             <h1 class="text-center mb-2">Quản lý người dùng</h1>
@@ -107,11 +107,11 @@ $kq = $conn->query($sql);
                                         while ($row = $kq->fetch_assoc()) {
                                             echo "<tr>";
                                             echo "<td>" . $tt . "</td>";
-                                            echo "<td>". $row["name"] ."</td>";
-                                            echo "<td>". $row["usn"] ."</td>";
-                                            echo "<td>". $row["pass"] ."</td>";
-                                            echo "<td>". $row["donvi"] ."</td>";
-                                            echo "<td>". $row["quyenhan"] ."</td>";
+                                            echo "<td>" . $row["name"] . "</td>";
+                                            echo "<td>" . $row["usn"] . "</td>";
+                                            echo "<td>" . $row["pass"] . "</td>";
+                                            echo "<td>" . $row["donvi"] . "</td>";
+                                            echo "<td>" . $row["quyenhan"] . "</td>";
                                             echo "<td><a class='btn btn-sm btn-outline-warning' href='sua.php?id=" . $row["id"] . "'><i class='bi bi-pencil-square'></i></a>
                                             <a class='btn btn-sm btn-outline-danger' href='xoa.php?id=" . $row["id"] . "'><i class='bi bi-trash-fill'></i></a></td>";
                                             $tt++;

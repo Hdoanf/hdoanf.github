@@ -6,31 +6,31 @@ $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
 $search = "";
 $loaits = "";
-$tinh_trang="";
-$sql="SELECT * FROM full_information";
+$tinh_trang = "";
+$sql = "SELECT * FROM full_information";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
     $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
     $tinh_trang = isset($_GET['tinhtrang']) ? trim($_GET['tinhtrang']) : '';
     // lấy id của bảng product
     if (!empty($search)) {
-            $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
-            if ($tts->num_rows > 0) {
-                $tts2 = $tts->fetch_assoc();
-                $tentk = $tts2["id_product"];//lấy id của bảng product ứng với tên là biển seach
-                echo "<script>console.log('$tentk')</script>"; 
-                $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
-            }else{
-                $sql ="SELECT * FROM `full_information` WHERE 0";
-            }
-        }
-        if (!empty($loaits)) {
-            $sql .= " AND `product_category` = '$loaits'";//nối
-        }
-        if (!empty($tinh_trang)) {
-            $sql .= " AND `product_status` = '$tinh_trang'";
+        $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
+        if ($tts->num_rows > 0) {
+            $tts2 = $tts->fetch_assoc();
+            $tentk = $tts2["id_product"];//lấy id của bảng product ứng với tên là biển seach
+            echo "<script>console.log('$tentk')</script>";
+            $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
+        } else {
+            $sql = "SELECT * FROM `full_information` WHERE 0";
         }
     }
+    if (!empty($loaits)) {
+        $sql .= " AND `product_category` = '$loaits'";//nối
+    }
+    if (!empty($tinh_trang)) {
+        $sql .= " AND `product_status` = '$tinh_trang'";
+    }
+}
 $kq = $conn->query($sql);
 
 
@@ -50,7 +50,7 @@ $kq = $conn->query($sql);
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
@@ -80,17 +80,17 @@ $kq = $conn->query($sql);
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
-                                <i class="bi bi-grid-1x2"></i> Tài sản 
+                                <i class="bi bi-grid-1x2"></i> Tài sản
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">
-                                Chức năng 1
+                                Báo cáo | Xuất báo cáo
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">
-                                Chức năng 2
+
                             </a>
                         </li>
                         <li class="nav-item">
@@ -142,9 +142,9 @@ $kq = $conn->query($sql);
                                     $tinhtrang = $conn->query("SELECT DISTINCT `product_status` FROM full_information");
                                     if ($tinhtrang->num_rows > 0) {
                                         while ($rowtinhtrang = $tinhtrang->fetch_assoc()) {
-                                            $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";    
+                                            $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";
                                             echo "<option value='" . $rowtinhtrang['product_status'] . "' $select2 >
-                                            ".$rowtinhtrang['product_status']. "</option>";
+                                            " . $rowtinhtrang['product_status'] . "</option>";
                                         }
                                     }
                                     ?>
@@ -155,7 +155,7 @@ $kq = $conn->query($sql);
                                     <button type="submit" class="btn btn-primary w-100">Tìm kiếm </button>
                                 </div>
                                 <div class="col-md-1">
-                                   <a href="nguoidung.php" class="btn btn-danger w-100">Xóa</a>
+                                    <a href="nguoidung.php" class="btn btn-danger w-100">Xóa</a>
                                 </div>
                             </div>
 

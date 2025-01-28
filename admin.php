@@ -4,6 +4,10 @@ $username = "root";
 $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    echo "hình như chưa kết nối được ";
+}
 $search = "";
 $loaits = "";
 $tinh_trang = "";
@@ -88,8 +92,8 @@ $kq = $conn->query($sql);
         <div class="row">
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
+                    <ul class="nav flex-column ">
+                        <li class="nav-item nav-pills">
                             <a class="nav-link active" href="#">
                                 <i class="bi bi-grid-1x2"></i> Tài sản
                             </a>
@@ -100,9 +104,26 @@ $kq = $conn->query($sql);
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="them.php">
-                                Chức năng 2
-                            </a>
+                            <div>
+                                <button class="btn nav-link" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
+                                    Thêm tài sản
+                                </button>
+                                <div class="collapse" id="themtaisan">
+                                    <ul class="nav">
+                                        <li class="nav-item ms-2 ">
+                                            <a class="nav-link " href="#">
+                                                Thêm mục tài sản mới
+                                            </a>
+                                        </li>
+                                        <li class="nav-item ms-2 ">
+                                            <a class="nav-link " href="#">
+                                                Thêm tài sản dã có sẵn
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">
@@ -120,7 +141,7 @@ $kq = $conn->query($sql);
                         <h2 class="card-title mb-4">Quản lý tài sản </h2>
                         <form class="row g-3 mb-4" method="GET">
                             <div class="col-md-4">
-                                <div class="input-group">
+                                <div clagitss="input-group">
                                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                                     <input name="search" type="text" class="form-control " placeholder="Tìm kiếm..."
                                         value="<?php echo htmlspecialchars($search) ?>">
@@ -219,7 +240,7 @@ $kq = $conn->query($sql);
                                             }
                                             echo "<td>" . $category . "</td>";
 
-                                            //tên tài sản 
+                                            //tên tài sản
                                             $ten = strtoupper($row["product_name"]);
                                             $kqname = $conn->query("SELECT * FROM `product` WHERE `id_product`='$ten'");
                                             if ($kqname->num_rows > 0) {
@@ -259,11 +280,11 @@ $kq = $conn->query($sql);
         </div>
     </div>
 
-    <!-- <footer class="footer mt-auto py-3 bg-light">
+    <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">
-            <span class="text-muted">Phần mềm quản lý tài sản</span>
+            <span class="text-muted">Phần mềm quản lý tài sản siêu vip </span>
         </div>
-    </footer> -->
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

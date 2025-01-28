@@ -4,12 +4,14 @@ require __DIR__ . '/vendor/autoload.php';
 //
 use Picqer\Barcode\BarcodeGeneratorHTML;
 
-
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    echo "hình như chưa kết nối được ";
+}
 
 
 if ($conn->connect_error) {
@@ -94,8 +96,10 @@ if ($result->num_rows > 0) {
 
             <tr>
                 <th>Mô tả</th>
-                <td> <?php echo $row["product_information"];
-                ?></td>
+                <td>
+                    <?php echo $row["product_information"];
+                    ?>
+                </td>
 
             <tr>
                 <th>Trạng Thái</th>

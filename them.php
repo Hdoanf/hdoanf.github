@@ -12,13 +12,13 @@ if (isset($_GET['search']) && isset($_GET['loaitaisan']) && isset($_GET['tinhtra
     $tinh_trang = $_GET['tinhtrang'];
     $search = $_GET['search'];
     $sql = "SELECT * FROM `full_information` WHERE `product_category` LIKE '%$loaits%' AND `product_status` LIKE '%$tinh_trang%' AND `product_name` LIKE '%$search%'";
-} else if (isset($_GET['loaitaisan']) && isset($_GET['tinhtrang'])) {
+} elseif (isset($_GET['loaitaisan']) && isset($_GET['tinhtrang'])) {
     $loaits = $_GET['loaitaisan'];
     $tinh_trang = $_GET['tinhtrang'];
     $sql = "SELECT * FROM `full_information` WHERE `product_category` 
     LIKE '%$loaits%' AND `product_status` 
     LIKE '%$tinh_trang%'";
-} else if (isset($_GET['search'])) {
+} elseif (isset($_GET['search'])) {
     $search = $_GET['search'];
     $sql = "SELECT * FROM full_information WHERE  product_name LIKE %$search%";
 } else {
@@ -128,86 +128,70 @@ $kq = $conn->query($sql);
                                             </div>
                                             <div class="mb-3">
                                                 <label for="productCode" class="form-label">Mã tài sản</label>
-                                                <input type="text" id="productCode" class="form-control"
-                                                    placeholder="nhập mã tài sản">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="entryDate" class="form-label">Ngày nhập</label>
-                                                <input type="date" id="entryDate" class="form-control">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="quantity" class="form-label">Số lượng</label>
-                                                <input type="number" id="quantity" class="form-control" placeholder="0">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Thông tin bổ sung -->
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header fw-bold">Thông tin bổ sung</div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label for="assetGroup" class="form-label">Nhóm tài sản</label>
-                                                <select id="assetGroup" class="form-select">
-                                                    <option selected>Chọn nhóm tài sản</option>
-                                                    <option value="1">Nhóm 1</option>
-                                                    <option value="2">Nhóm 2</option>
-                                                    <option value="3">Nhóm 3</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="supplier" class="form-label">Nhà cung cấp</label>
-                                                <select id="supplier" class="form-select">
-                                                    <option selected>Chọn nhà cung cấp</option>
-                                                    <option value="1">Công ty A</option>
-                                                    <option value="2">Công ty B</option>
-                                                    <option value="3">Công ty C</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="description" class="form-label">Mô tả</label>
-                                                <textarea id="description" class="form-control" rows="3"
-                                                    placeholder="Nhập mô tả tài sản"></textarea>
+                                                <div class="card-header fw-bold">Thông tin bổ sung</div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="assetGroup" class="form-label">Nhóm tài sản</label>
+                                                        <select id="assetGroup" class="form-select">
+                                                            <option selected>Chọn nhóm tài sản</option>
+                                                            <option value="1">Nhóm 1</option>
+                                                            <option value="2">Nhóm 2</option>
+                                                            <option value="3">Nhóm 3</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="supplier" class="form-label">Nhà cung cấp</label>
+                                                        <select id="supplier" class="form-select">
+                                                            <option selected>Chọn nhà cung cấp</option>
+                                                            <option value="1">Công ty A</option>
+                                                            <option value="2">Công ty B</option>
+                                                            <option value="3">Công ty C</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="description" class="form-label">Mô tả</label>
+                                                        <textarea id="description" class="form-control" rows="3"
+                                                            placeholder="Nhập mô tả tài sản"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- Ảnh tài sản -->
-                            <div class="row g-3 mt-3">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-header fw-bold">Ảnh tài sản</div>
-                                        <div class="card-body text-center">
-                                            <label for="productImage" class="form-label">Kéo thả hoặc <a href="#">tải
-                                                    hình ảnh</a></label>
-                                            <input type="file" id="productImage" class="form-control"
-                                                style="max-width: 500px; margin: 0 auto;">
+                                    <!-- Ảnh tài sản -->
+                                    <div class="row g-3 mt-3">
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-header fw-bold">Ảnh tài sản</div>
+                                                <div class="card-body text-center">
+                                                    <label for="productImage" class="form-label">Kéo thả hoặc <a
+                                                            href="#">tải
+                                                            hình ảnh</a></label>
+                                                    <input type="file" id="productImage" class="form-control"
+                                                        style="max-width: 500px; margin: 0 auto;">
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-header fw-bold">Quét</div>
-                                        <div class="card-body text-center">
-                                            <button type="submit" class="btn btn-primary me-2">Quét</button>
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-header fw-bold">Quét</div>
+                                                <div class="card-body text-center">
+                                                    <button type="submit" class="btn btn-primary me-2">Quét</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <!-- Buttons -->
+                                <div class="row g-3 mt-4 text-center">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary me-2">Lưu</button>
+                                        <button type="button" class="btn btn-danger">Hủy</button>
+                                    </div>
+                                </div>
+                        </form>
                     </div>
-                    <!-- Buttons -->
-                    <div class="row g-3 mt-4 text-center">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary me-2">Lưu</button>
-                            <button type="button" class="btn btn-danger">Hủy</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
