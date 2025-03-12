@@ -11,9 +11,7 @@ if ($conn->connect_error) {
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information`";
 $sql = "SELECT * FROM `full_information` WHERE 1=1";
-
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -38,7 +36,6 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
   }
 }
 $kq = $conn->query($sql);
-
 ?>
 
 
@@ -51,7 +48,6 @@ $kq = $conn->query($sql);
   <title>Quản lý tài sản </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="index.css">
 
 </head>
 
@@ -105,26 +101,36 @@ $kq = $conn->query($sql);
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="taisan.php">
+                Mục tài sản đã có sẵn
+              </a>
+            </li>
+            <li class="nav-item">
               <div>
                 <button class="btn nav-link" type="button" data-bs-toggle="collapse"
                   data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
-                  Thêm tài sản
+                  Báo cáo
                 </button>
                 <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="#">
-                        Thêm mục tài sản mới
+                      <a class="nav-link " href="baocao.php">
+                        Báo cáo hỏng
                       </a>
                     </li>
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="#">
-                        Thêm tài sản dã có sẵn
+                      <a class="nav-link " href="baocaodichuyen.php">
+                        Báo cáo di chuyển tài sản
                       </a>
                     </li>
                   </ul>
                 </div>
               </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="lichsu.php">
+                Lịch sử
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="">
@@ -156,8 +162,10 @@ $kq = $conn->query($sql);
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
                     while ($rowloai = $loai->fetch_assoc()) {
-                      $kqloai = $conn->query("SELECT * FROM `category_product`
-                                        WHERE `id_category`=" . $rowloai['product_category'] . "");
+                      $kqloai = $conn->query(
+                        "SELECT * FROM `category_product`
+                                        WHERE `id_category`=" . $rowloai['product_category'] . ""
+                      );
                       $rownameloai = $kqloai->fetch_assoc();
                       $select = ($rowloai['product_category'] == $loaits) ? "selected" : "";
                       // echo "<script>console.log('$select')</script>";
@@ -184,7 +192,7 @@ $kq = $conn->query($sql);
                 </select>
               </div>
               <div class="col-md-2">
-                <a href="them.php" class="btn btn-primary w-100">Thêm</a>
+                <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
               </div>
               <div class="row g-2 mb-4">
                 <div class="col-md-2">
@@ -266,15 +274,15 @@ $kq = $conn->query($sql);
                       echo "<td>" . $row["product_information"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
                       echo "<td> 
-                        <button class='btn btn-outline-info btn-sm' onclick='xemChiTiet(\"" . $row["barcode"] . "\")'>
+                        <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>
                         </button>
-                        <a class='btn btn-sm btn-outline-warning' href='sua.php?id=" . $row["barcode"] . "'>
+                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-pencil-square'></i>
-                        </a>
-                        <a class='btn btn-sm btn-outline-danger' href='xoa.php?id=" . $row["barcode"] . "'>
+                        </button>
+                        <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-trash-fill'></i>
-                        </a>
+                        </button>
                       </td>";
 
                       $tt++;
@@ -290,7 +298,6 @@ $kq = $conn->query($sql);
         </div>
       </main>
     </div>
-    <!-- dsafsdaf -->
   </div>
   <!-- ing -->
   <!-- <footer class="footer mt-auto py-3 bg-light"> -->
@@ -300,14 +307,14 @@ $kq = $conn->query($sql);
   <!-- </footer> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- modal hien chitiet-->
-  <div class="modal fade mt-4" id="modalChiTiet" tabindex="-1" aria-labelledby="modalChiTietLabel" aria-hidden="true">
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalChiTietLabel">Chi Tiết Tài Sản</h5>
+          <h5 class="modal-title" id="modal"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="modalBodyChiTiet">
+        <div class="modal-body" id="modalbody">
           <!-- sau nay se duoc them vao bang js ben duoi -->
           <div class="text-center">
             <div class="spinner-border text-primary" role="status">
@@ -319,23 +326,66 @@ $kq = $conn->query($sql);
     </div>
   </div>
 
-  <script>
-    function xemChiTiet(id) {
-      // Hiển thị modal
-      var myModal = new bootstrap.Modal(document.getElementById('modalChiTiet'));
-      myModal.show();
+  <!-- modalXoa -->
+  <div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalXoaLabel">Xác nhận xóa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h4>Bạn có chắc chắn muốn xóa không?</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="button" class="btn btn-danger" id="btnXacNhanXoa">Đồng ý</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal suataisan --->
+  <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalbodysua">
+          <!-- sau nay se duoc them vao bang js ben duoi -->
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">dangload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      // Load dữ liệu bằng AJAX
-      fetch(`chitiet.php?id=${id}`)
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById("modalBodyChiTiet").innerHTML = data;
-        })
-        .catch(error => {
-          document.getElementById("modalBodyChiTiet").innerHTML = '<p class="text-danger">Lỗi</p>';
-        });
-    }
-  </script>
+  <!--modal themtaisanmoi --->
+  <div class="modal fade" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalbodythem">
+          <!-- sau nay se duoc them vao bang js ben duoi -->
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">dangload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="main.js"></script>
 
 </body>
 
