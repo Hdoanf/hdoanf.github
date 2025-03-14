@@ -1,5 +1,4 @@
 <?php
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -9,18 +8,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   echo "hình như chưa kết nối được ";
 }
-
-session_start();
-$toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
-$toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
-echo "<script>console.log('$toastthanhcong')</script>";
-unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
-
-
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE 1=1";
+$sql = "SELECT * FROM `user_choices` WHERE 1=1
+          ORDER BY `user_choices`.`created_at` DESC ";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -34,7 +26,7 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
       echo "<script>console.log('$tentk')</script>";
       $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
     } else {
-      $sql = "SELECT * FROM `full_information` WHERE 0";
+      $sql = "SELECT * FROM `user_choices` WHERE 0";
     }
   }
   if (!empty($loaits)) {
@@ -44,6 +36,7 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
     $sql .= " AND `product_status` = '$tinh_trang'";
   }
 }
+
 $kq = $conn->query($sql);
 ?>
 
@@ -54,7 +47,7 @@ $kq = $conn->query($sql);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý tài sản </title>
+  <title>Lich su </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
@@ -99,8 +92,8 @@ $kq = $conn->query($sql);
       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
           <ul class="nav flex-column ">
-            <li class="nav-item nav-pills">
-              <a class="nav-link active" href="#">
+            <li class="nav-item ">
+              <a class="nav-link " href="admin.php">
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
@@ -136,8 +129,8 @@ $kq = $conn->query($sql);
                 </div>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="lichsu.php">
+            <li class="nav-item nav-pills">
+              <a class="nav-link active" href="lichsu.php">
                 Lịch sử
               </a>
             </li>
@@ -152,9 +145,9 @@ $kq = $conn->query($sql);
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <!-- chỗ tìm kiếm -->
-        <div class="card mt-3">
+        <div class="card mt-4">
           <div class="card-body">
-            <h2 class="card-title mb-4">Quản lý tài sản </h2>
+            <h2 class="card-title mb-4">Lịch sử </h2>
             <form class="row g-3 mb-4" method="GET">
               <div class="col-md-4">
                 <div class="input-group">
@@ -168,7 +161,7 @@ $kq = $conn->query($sql);
                 <select name="loaitaisan" class='form-select'>
                   <option value="">Loại Tài sản </option>
                   <?php
-                  $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
+                  $loai = $conn->query("SELECT DISTINCT product_category FROM user_choices");
                   if ($loai->num_rows > 0) {
                     while ($rowloai = $loai->fetch_assoc()) {
                       $kqloai = $conn->query(
@@ -189,7 +182,7 @@ $kq = $conn->query($sql);
                 <select name="tinhtrang" class="form-select">
                   <option value="">Tình trạng</option>
                   <?php
-                  $tinhtrang = $conn->query("SELECT DISTINCT `product_status` FROM full_information");
+                  $tinhtrang = $conn->query("SELECT DISTINCT `product_status` FROM user_choices");
                   if ($tinhtrang->num_rows > 0) {
                     while ($rowtinhtrang = $tinhtrang->fetch_assoc()) {
                       $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";
@@ -200,19 +193,16 @@ $kq = $conn->query($sql);
                   ?>
                 </select>
               </div>
-              <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-              </div>
-            </form>
-            <div class="row g-2 mb-4">
-              <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
-              </div>
-              <div class="col-md-2">
-                <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
+              <div class="row g-2 mb-4">
+                <div class="col-md-2">
+                  <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </div>
+                <div class="col-md-2">
+                  <a href="lichsu.php" class="btn btn-danger w-100">Xóa</a>
+                </div>
               </div>
 
-            </div>
+            </form>
             <!-- bảng render từ database -->
             <div class="table-responsive " style="overflow-y:scroll;height:60vh;">
               <table class="table table-hover text-center table-scroll table-striped">
@@ -282,14 +272,11 @@ $kq = $conn->query($sql);
                       echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
                       echo "<td>" . $row["product_information"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
-
                       echo "<td> 
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>
                         </button>
-                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-pencil-square'></i>
-                        </button>
+                      
                         <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-trash-fill'></i>
                         </button>
@@ -354,58 +341,11 @@ $kq = $conn->query($sql);
       </div>
     </div>
   </div>
-  <!--modal suataisan --->
-  <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbodysua">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!--modal themtaisanmoi --->
-  <div class="modal fade" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbodythem">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- toast template -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="d-flex">
-        <div class="toast-body" id="toastbd">
-          <?php echo $toastthanhcong; ?>
-        </div>
-        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-    </div>
-  </div>
+
 
   <script src="main.js"></script>
+
 </body>
 
 </html>
