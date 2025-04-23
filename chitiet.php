@@ -24,7 +24,9 @@ $id = $_GET['id'];
 // lay du lieu
 $sql = "SELECT * FROM user_choices WHERE barcode = '$id' ORDER BY `user_choices`.`created_at` DESC ";
 $result = $conn->query($sql);
-
+$fullsql = "SELECT `note`,`old_unit`   FROM `full_information` WHERE `barcode`= '$id'";
+$kq = $conn->query($fullsql);
+$rowfull = $kq->fetch_assoc();
 if ($result->num_rows > 0) {
   $row = $result->fetch_assoc();
   $data = $row["barcode"];
@@ -93,7 +95,6 @@ if ($result->num_rows > 0) {
         }
         echo "<td>" . $nam . "</td>"; ?>
       </tr>
-
       <tr>
         <th>Mô tả</th>
         <td>
@@ -108,11 +109,24 @@ if ($result->num_rows > 0) {
         </td>
       <tr>
       <tr>
-        <th>Trạng Thái</th>
-        <?php
-        $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
-        echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>"; ?>
+        <th>Phòng cũ</th>
+        <td>
+          <?php
+          //echo 
+          $id_old_unit = $rowfull["old_unit"];
+          $old_unit_sql = "SELECT * FROM `units` WHERE `id_units`= '$id_old_unit'";
+          $result_unit = $conn->query($old_unit_sql);
+          $old_unit = $result_unit->fetch_assoc();
+          echo $old_unit['units'];
+          ?>
+        </td>
       </tr>
+      <th>Trạng Thái</th>
+      <?php
+      $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
+      echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>"; ?>
+      </tr>
+
       <tr>
         <th>Mã Vạch</th>
         <td>
@@ -123,11 +137,11 @@ if ($result->num_rows > 0) {
         <th>Ghi chú</th>
         <td>
           <?php
-          $note = $row["note"];
-          echo $note;
+          echo $rowfull["note"];
           ?>
         </td>
       </tr>
+
     </table>
     <a href="nguoidung.php" class="btn btn-primary">Quay lại</a>
   </div>

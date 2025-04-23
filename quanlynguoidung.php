@@ -53,38 +53,53 @@ $kq = $conn->query($sql);
     <div class="row">
       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
-          <ul class="nav flex-column nav-pills">
+          <ul class="nav flex-column ">
             <li class="nav-item">
-              <a class="nav-link " href="admin.php">
+              <a class="nav-link" href="admin.php">
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="">
+            <li class="nav-item nav-pills ">
+              <a class="nav-link active" href="quanlynguoidung.php">
                 Quản lý người dùng
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="taisan.php">
+                Mục tài sản đã có sẵn
               </a>
             </li>
             <li class="nav-item">
               <div>
                 <button class="btn nav-link" type="button" data-bs-toggle="collapse"
                   data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
-                  Thêm tài sản
+                  Báo cáo
                 </button>
                 <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="#">
-                        Thêm mục tài sản mới
+                      <a class="nav-link " href="baocao.php">
+                        Báo cáo hỏng
                       </a>
                     </li>
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="#">
-                        Thêm tài sản dã có sẵn
+                      <a class="nav-link " href="baocaodichuyen.php">
+                        Báo cáo di chuyển tài sản
                       </a>
                     </li>
                   </ul>
                 </div>
               </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="lichsu.php">
+                Lịch sử
+              </a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="kho.php">
+                Kho
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="">

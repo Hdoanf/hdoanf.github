@@ -1,10 +1,13 @@
 <?php
+
+use Dom\Element;
+
 require_once 'vendor/autoload.php';
 
 $phpWord = new \PhpOffice\PhpWord\PhpWord();
 $section = $phpWord->addSection();
 
-// Thêm tiêu đề quốc gia và trường học
+// Tiêu de
 $section->addText("TRƯỜNG ĐẠI HỌC", ['bold' => true], ['alignment' => 'center']);
 $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", ['bold' => true], ['alignment' => 'center']);
 $section->addText("Độc lập - Tự do - Hạnh phúc", ['bold' => true], ['alignment' => 'center']);
@@ -36,7 +39,7 @@ if ($conn->connect_error) {
   die("Kết nối thất bại: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM `full_information` WHERE `product_status` LIKE 'active'";
+$sql = "SELECT * FROM `full_information` WHERE `product_status` LIKE 'inactive' OR `product_status` LIKE 'maintenance'";
 $kq = $conn->query($sql);
 
 // Tạo bảng
@@ -57,10 +60,18 @@ while ($row = $kq->fetch_assoc()) {
   $name = strtoupper($row["product_name"]);
   $units = strtoupper($row["units"]);
   $date = date("Y/m/d");
+  $status = $row["product_status"];
+  $sat = "";
+  if ($status == "maintenance") {
+    $sat  = "Bao tri";
+  } else {
+    $sat  = "Hong";
+  }
   $table->addRow();
   $table->addCell(1000)->addText($stt++);
   $table->addCell(2000)->addText($date);
   $table->addCell(4000)->addText($name);
+  $table->addCell(4000)->addText($sat);
   $table->addCell(4000)->addText($units);
 }
 

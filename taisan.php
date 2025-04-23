@@ -4,6 +4,10 @@ $username = "root";
 $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
+session_start();
+$toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
+$toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
+unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 
 ?>
 
@@ -24,8 +28,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
-          height="30" class="d-inline-block align-text-top me-2" alt="Logo">
+        <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30" height="30"
+          class="d-inline-block align-text-top me-2" alt="Logo">
         Quản lý tài sản của admin
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -49,8 +53,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
           <ul class="nav flex-column ">
-            <li class="nav-item ">
-              <a class="nav-link active" href="admin.php">
+            <li class="nav-item">
+              <a class="nav-link" href="admin.php">
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
@@ -61,16 +65,16 @@ $conn = new mysqli($servername, $username, $password, $dbname);
             </li>
             <li class="nav-item nav-pills">
               <a class="nav-link active" href="taisan.php">
-                Tài sản đã có sẵn
+                Mục tài sản đã có sẵn
               </a>
             </li>
             <li class="nav-item">
               <div>
-                <button class="btn nav-link" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#themtaisanmoi" aria-expanded="false" aria-controls="themtaisanmoi">
+                <button class="btn nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#themtaisan"
+                  aria-expanded="false" aria-controls="themtaisan">
                   Báo cáo
                 </button>
-                <div class="collapse" id="themtaisanmoi">
+                <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
                       <a class="nav-link " href="baocao.php">
@@ -85,6 +89,16 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                   </ul>
                 </div>
               </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="lichsu.php">
+                Lịch sử
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="kho.php">
+                Kho
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="">
@@ -112,6 +126,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                   echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowcate["name_category"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
+                      <i class='bi bi-trash-fill'></i>
+                        </button>";
                   echo "</div>";
                 }
               } else {
@@ -144,6 +161,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                   echo "<li class='list-group-item'>Name: " . htmlspecialchars($rowgroup["name_group"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_group"] . "\")'>
+                      <i class='bi bi-trash-fill'></i>
+                        </button>";
                   echo "</div>";
                 }
               } else {
@@ -176,6 +196,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                   echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowproduct["name_product"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
+                      <i class='bi bi-trash-fill'></i>
+                        </button>";
                   echo "</div>";
                 }
               } else {
@@ -212,9 +235,40 @@ $conn = new mysqli($servername, $username, $password, $dbname);
     </div>
   </div>
 </div>
+<!-- toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastbd">
+        <?php echo $toastthanhcong; ?>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<!-- modalXoa -->
+<div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalXoaLabel">Xác nhận xóa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h4>Bạn có chắc chắn muốn xóa không?</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+        <button type="button" class="btn btn-danger" id="btnXacNhanXoa">Đồng ý</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
+  //goi modal them cac loai tai san
   function themtaisanmoi(id) {
     var myModal = new bootstrap.Modal(document.getElementById('modalthem'));
     myModal.show();
@@ -243,6 +297,52 @@ $conn = new mysqli($servername, $username, $password, $dbname);
         document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
       });
   }
+  // hien thi  toast 
+  document.addEventListener('DOMContentLoaded', function() {
+    var toast = document.getElementById('toast');
+    if (toast.innerText.trim() !== "") {
+      var toast = new bootstrap.Toast(toast);
+      toast.show();
+    }
+  });
+
+
+  let tscanxoa = null;
+
+  function xoa(id) {
+    tscanxoa = id; // luu barcode vao bien nay 
+    var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
+    myModal.show();
+  }
+
+
+  document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
+    if (tscanxoa) {
+      fetch(`delete/xoa_all.php?id=${tscanxoa}`)
+        .then(AuthenticatorAssertionResponse => response.text()) //lay du lieu xoa
+        .then(data => {
+          console.log(data);
+
+          // toast xoa
+          var toast = document.getElementById('toast');
+          var toastBody = document.getElementById('toastbd');
+          toastBody.innerHTML = "Xóa thành công";
+          var toast = new bootstrap.Toast(toast);
+          toast.show();
+
+          // an modal
+          var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoa'));
+          if (modal) modal.hide();
+
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
+        })
+        .catch(error => {
+          console.error("Lỗi:", error);
+        });
+    }
+  });
 </script>
 
 </html>

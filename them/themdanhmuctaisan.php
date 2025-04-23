@@ -22,17 +22,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare("INSERT INTO `product`(`id_product`, `name_product`) VALUES (?, ?)");
     $stmt->bind_param("ss", $id, $name);
     $kq = $stmt->execute();
-
+    session_start();
     if ($kq) {
-      echo "<script>alert('Thêm danh mục thành công!');</script>";
-      header('Location:http://localhost/hdoanf.github/taisan.php');
+      $_SESSION['thanhcong'] = "Thêm thành công";
     } else {
-      echo "<script>alert('Thêm thất bại!');</script>";
+      $_SESSION['loi'] = "Thất bại";
     }
     $stmt->close();
   } else {
-    echo "<script>alert('Vui lòng nhập đầy đủ thông tin!');</script>";
+    echo "<script>alert('Thieu');</script>";
   }
+  header('Location:http://localhost/hdoanf.github/taisan.php');
+  exit();
 }
 
 $conn->close();

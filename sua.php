@@ -10,7 +10,14 @@ if ($conn->connect_error) {
   die();
 }
 
-$sqlunits = "SELECT * from units";
+$sqlunits = "SELECT * FROM units
+ORDER BY
+    CASE
+        WHEN units = 'Chưa phân lớp' THEN 0
+        ELSE 1
+    END,
+    units;
+";
 $kqunits = $conn->query($sqlunits);
 $status = "SELECT * from status_product";
 $kqstatus = $conn->query($status);

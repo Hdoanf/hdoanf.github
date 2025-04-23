@@ -16,22 +16,23 @@ $name = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $id = isset($_POST['id']) ? trim($_POST['id']) : '';
   $name = isset($_POST['ten']) ? trim($_POST['ten']) : '';
-
+  session_start();
   if (!empty($id) && !empty($name)) {
     $stmt = $conn->prepare("INSERT INTO `category_product`(`id_category`, `name_category`) VALUES (?, ?)");
     $stmt->bind_param("ss", $id, $name);
     $kq = $stmt->execute();
 
     if ($kq) {
-      echo "<script>alert('Thêm danh mục thành công!');</script>";
-      header('Location:http://localhost/hdoanf.github/taisan.php');
+      $_SESSION['thanhcong'] = "Thêm thành công";
     } else {
-      echo "<script>alert('Thêm thất bại!');</script>";
+      $_SESSION['loi'] = "Thất bại";
     }
     $stmt->close();
   } else {
-    echo "<script>alert('Vui lòng nhập đầy đủ thông tin!');</script>";
+    echo "<script>alert('Thieu');</script>";
   }
+  header('Location:http://localhost/hdoanf.github/taisan.php');
+  exit();
 }
 
 $conn->close();

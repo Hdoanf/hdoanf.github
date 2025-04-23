@@ -13,7 +13,14 @@ $category_product = "SELECT * FROM category_product";
 $group_product = "SELECT * FROM group_product";
 $product = "SELECT * FROM product";
 $status_product = "SELECT * FROM status_product";
-$units = "SELECT * FROM units";
+$units = "SELECT * FROM units
+ORDER BY
+    CASE
+        WHEN units = 'Chưa phân lớp' THEN 0
+        ELSE 1
+    END,
+    units;
+";
 $year_import = "SELECT * FROM year_import";
 
 $kqcate = $conn->query($category_product);
@@ -64,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $sqlInsert = "INSERT INTO `full_information`
   (`product_group`, `product_category`, `product_name`, `year_import`, `item`,
   `barcode`,`product_information`,`Warranty_Period`, `product_status`, `units`, `note`)
-  VALUES ('$nhomts','$loaits','$taisan','$nam','$newItem','$barcode','$info','$baohanh','$trangthai','$donvi','chim')";
+  VALUES ('$nhomts','$loaits','$taisan','$nam','$newItem','$barcode','$info','$baohanh','$trangthai','$donvi','')";
   $kqInsert = $conn->query($sqlInsert);
 
   session_start();

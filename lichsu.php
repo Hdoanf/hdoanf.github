@@ -135,6 +135,11 @@ $kq = $conn->query($sql);
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="kho.php">
+                Kho
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>
