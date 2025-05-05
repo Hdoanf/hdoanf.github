@@ -51,7 +51,7 @@ $kq = $conn->query($sql);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý tài sản </title>
+  <title>Kho</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
@@ -78,7 +78,7 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Doanchim</p>
+                <p class="mb-0 ms-2">Dashboard</p>
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Thông tin</a></li>
@@ -120,7 +120,7 @@ $kq = $conn->query($sql);
                 <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="baocao.php">
+                      <a class="nav-link " href="tshong.php">
                         Báo cáo hỏng
                       </a>
                     </li>
@@ -156,7 +156,7 @@ $kq = $conn->query($sql);
         <!-- chỗ tìm kiếm -->
         <div class="card mt-3">
           <div class="card-body">
-            <h2 class="card-title mb-4">Quản lý tài sản </h2>
+            <h2 class="card-title mb-4">Kho</h2>
             <form class="row g-3 mb-4" method="GET">
               <div class="col-md-4">
                 <div class="input-group">

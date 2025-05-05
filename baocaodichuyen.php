@@ -36,7 +36,8 @@ if ($conn->connect_error) {
   die("Kết nối thất bại: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM `full_information` WHERE `product_status` LIKE 'maintenance'";
+$sql = " SELECT * FROM `full_information` WHERE `old_unit` IS NOT NULL AND `old_unit` != '';
+";
 $kq = $conn->query($sql);
 
 // Tạo bảng
@@ -50,26 +51,23 @@ $table->addCell(1000)->addText("STT");
 $table->addCell(2000)->addText("NGÀY");
 $table->addCell(4000)->addText("TÊN TÀI SẢN");
 $table->addCell(4000)->addText("ĐÁNH GIÁ CỦA PHỤ TRÁCH BỘ PHẬN");
-$table->addCell(4000)->addText("Don vi chiu trach nghiem");
-$table->addCell(4000)->addText("Ca nhan chiu trach nghiem");
+$table->addCell(4000)->addText("Don vi moi");
+$table->addCell(4000)->addText("Don vi cu");
 // Thêm dữ liệu vào bảng
 $stt = 1;
 while ($row = $kq->fetch_assoc()) {
   $name = strtoupper($row["product_name"]);
-  $units = "Kho";
+  $units = $row["units"];
   $date = date("Y/m/d");
   $status = $row["product_status"];
-  $sat = "";
-  if ($status == "maintenance") {
-    $sat  = "Bao tri";
-  }
+  $old_units = $row["old_unit"];
   $table->addRow();
   $table->addCell(1000)->addText($stt++);
   $table->addCell(2000)->addText($date);
   $table->addCell(4000)->addText($name);
-  $table->addCell(4000)->addText($sat);
+  $table->addCell(4000)->addText($status);
   $table->addCell(4000)->addText($units);
-  $table->addCell(4000)->addText("khong co");
+  $table->addCell(4000)->addText($old_units);
 }
 
 // Xuống dòng trước khi thêm chữ ký

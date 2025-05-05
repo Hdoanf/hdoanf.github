@@ -20,7 +20,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE 1=1";
+$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' ";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -81,7 +81,7 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Dashboard</p>
+                <p class="mb-0 ms-2">Admin</p>
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Thông tin</a></li>
@@ -99,8 +99,8 @@ $kq = $conn->query($sql);
       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
           <ul class="nav flex-column ">
-            <li class="nav-item nav-pills">
-              <a class="nav-link active" href="#">
+            <li class="nav-item">
+              <a class="nav-link" href="admin.php">
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
@@ -114,16 +114,16 @@ $kq = $conn->query($sql);
                 Mục tài sản đã có sẵn
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item nav-pills">
               <div>
-                <button class="btn nav-link" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
+                <button class="btn nav-link active" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#baocao" aria-expanded="false" aria-controls="baocao">
                   Báo cáo
                 </button>
-                <div class="collapse" id="themtaisan">
+                <div class="collapse" id="baocao">
                   <ul class="nav">
-                    <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tshong.php">
+                    <li class="nav-item nav-pills ms-2 ">
+                      <a class="nav-link active " href="tshong.php">
                         Báo cáo hỏng
                       </a>
                     </li>
@@ -214,7 +214,7 @@ $kq = $conn->query($sql);
                 <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
+                <a href="baocao.php" class="btn btn-info w-100">Xuất báo cáo</a>
               </div>
 
             </div>

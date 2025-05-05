@@ -78,7 +78,7 @@ $kq = $conn->query($sql);
                 <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="baocao.php">
+                      <a class="nav-link " href="tshong.php">
                         Báo cáo hỏng
                       </a>
                     </li>
