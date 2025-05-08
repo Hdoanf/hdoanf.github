@@ -5,6 +5,7 @@ $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+$conn->set_charset('utf8mb4');
 if (isset($_POST["usn"]) && isset($_POST["pass"])) {
   $usn = $_POST["usn"];
   $pass = $_POST["pass"];

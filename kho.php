@@ -10,6 +10,7 @@ if ($conn->connect_error) {
   echo "hình như chưa kết nối được ";
 }
 
+$conn->set_charset('utf8mb4');
 session_start();
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
 $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";

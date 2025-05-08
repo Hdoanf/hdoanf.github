@@ -9,6 +9,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   echo "hình như chưa kết nối được ";
 }
+$conn->set_charset('utf8mb4');
 
 session_start();
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
@@ -45,6 +46,8 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
   }
 }
 $kq = $conn->query($sql);
+
+
 ?>
 
 
@@ -144,6 +147,11 @@ $kq = $conn->query($sql);
             <li class="nav-item">
               <a class="nav-link" href="kho.php">
                 Kho
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
               </a>
             </li>
             <li class="nav-item">

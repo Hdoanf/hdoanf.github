@@ -10,6 +10,7 @@ if ($conn->connect_error) {
   die();
 }
 
+$conn->set_charset('utf8mb4');
 $sqlunits = "SELECT * FROM units
 ORDER BY
     CASE

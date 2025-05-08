@@ -80,21 +80,23 @@ function themtaisan() {
       document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
     });
 }
-// function themtaisanmoi(){
-//   var myModal = new bootstrap.myModal(document.getElementById('modalThemmoi')); 
-// myModal.show();
-//   fetch(`them.php`){
-//     .then(response => response.text())
-//     .then(data => {
-//       document.getElementById("modalbodythemmoi").innerHTML = data;
-//     })
-//     .catch(error => {
-//       console.log(error)
-//       document.getElementById("modalbodythemmoi").innerHTML = '<p class="text-danger">Lỗi</p>';
-//     });
-//
-//   }
-//}
+
+function thongbao(id) {
+  var myModal = new bootstrap.Modal(document.getElementById('modalthongbao'));
+  myModal.show();
+
+  fetch(`thongbaohong.php?id=${id}`)
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("modalbodythongbao").innerHTML = data;
+    })
+    .catch(error => {
+      console.log(error);
+      document.getElementById("modalbodythongbao").innerHTML = '<p class="text-danger">Lỗi</p>';
+    });
+}
+
+
 // hien thi toast
 document.addEventListener('DOMContentLoaded', function() {
   var toast = document.getElementById('toast');
