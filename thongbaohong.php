@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($barcode && $mota) {
     $barcode = $conn->real_escape_string($barcode);
     $mota = $conn->real_escape_string($mota);
-    $sql = "INSERT INTO thongbao (barcode, mota, date) VALUES ('$barcode', '$mota', NOW())";
+    $sql = "INSERT INTO thongbao (barcode, mota, date, Xac_nhan) VALUES ('$barcode', '$mota', NOW(),'Chưa sử lý')";
     session_start();
     if ($conn->query($sql)) {
       $_SESSION['thanhcong'] = "Thành công";

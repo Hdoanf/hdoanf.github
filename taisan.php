@@ -102,6 +102,11 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>

@@ -123,7 +123,7 @@ $kq = $conn->query($sql);
                       </a>
                     </li>
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="baocaodichuyen.php">
+                      <a class="nav-link " href="tsdichuyen.php">
                         Báo cáo di chuyển tài sản
                       </a>
                     </li>
@@ -139,6 +139,11 @@ $kq = $conn->query($sql);
             <li class="nav-item">
               <a class="nav-link" href="kho.php">
                 Kho
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
               </a>
             </li>
             <li class="nav-item">

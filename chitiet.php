@@ -143,7 +143,7 @@ if ($result->num_rows > 0) {
       </tr>
 
     </table>
-    <a href="nguoidung.php" class="btn btn-primary">Quay lại</a>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

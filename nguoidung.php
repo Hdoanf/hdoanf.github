@@ -251,9 +251,8 @@ $kq = $conn->query($sql);
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>
                     </button>
-
-                        <button class='btn btn-outline-info btn-sm' onclick='thongbao(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-eye'></i>
+                        <button class='btn btn-outline-danger btn-sm' onclick='thongbao(\"" . $row["barcode"] . "\")'>
+                            <i class='bi bi-exclamation-triangle-fill'></i>
                     </button>
                         </td>";
                       echo "</tr>";

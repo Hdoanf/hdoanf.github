@@ -148,6 +148,11 @@ $kq = $conn->query($sql);
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>
@@ -215,7 +220,7 @@ $kq = $conn->query($sql);
                 <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
               </div>
               <div class="col-md-2">
-                <a href="baocaodichuyen.php" class="btn btn-info w-100">Xuat bao cao</a>
+                <a href="baocaodichuyen.php" class="btn btn-info w-100">Xuất báo cáo</a>
               </div>
 
             </div>

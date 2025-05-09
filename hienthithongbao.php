@@ -30,7 +30,8 @@ $sql = "
   SELECT 
     fi.*, 
     tb.mota AS mota, 
-    tb.date AS thongbao_date
+tb.date AS thongbao_date,
+tb.Xac_nhan AS xacnhan
   FROM full_information fi
   INNER JOIN thongbao tb
     ON fi.barcode COLLATE utf8mb4_unicode_ci = tb.barcode COLLATE utf8mb4_unicode_ci
@@ -181,7 +182,7 @@ $kq = $conn->query($sql);
         <!-- chỗ tìm kiếm -->
         <div class="card mt-3">
           <div class="card-body">
-            <h2 class="card-title mb-4">Quản lý tài sản </h2>
+            <h2 class="card-title mb-4">Quản lý thông báo </h2>
             <form class="row g-3 mb-4" method="GET">
               <div class="col-md-4">
                 <div class="input-group">
@@ -233,12 +234,8 @@ $kq = $conn->query($sql);
             </form>
             <div class="row g-2 mb-4">
               <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
+                <a href="hienthithongbao.php" class="btn btn-danger w-100">Xóa</a>
               </div>
-              <div class="col-md-2">
-                <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
-              </div>
-
             </div>
             <!-- bảng render từ database -->
             <div class="table-responsive " style="overflow-y:scroll;height:65vh;">
@@ -251,8 +248,8 @@ $kq = $conn->query($sql);
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>
-                    <th>THÔNG TIN TÀI SẢN THÔNG Báo</th>
-                    <th>NGAY THÔNG Báo</th>
+                    <th>THÔNG TIN TÀI SẢN THÔNG BÁO</th>
+                    <th>NGAY THÔNG BÁO</th>
                     <th>TÁC VỤ</th>
                   </tr>
                 </thead>
@@ -295,17 +292,12 @@ $kq = $conn->query($sql);
                         $name = $rowname["name_product"];
                       }
                       echo "<td>" . $name . "</td>";
-                      //năm
-                      $nam = '';
-                      $strnam = $conn->real_escape_string($row["year_import"]);
-                      $sql = "SELECT * FROM `year_import` WHERE `id_year` LIKE '$strnam'";
-                      $kqnam = $conn->query($sql);
-                      if ($kqnam && $kqnam->num_rows > 0) {
-                        $rownam = $kqnam->fetch_assoc();
-                        $nam = $rownam['year_import'];
+                      if ($row['xacnhan'] == "Chưa sử lý") {
+                        $textcolor = 'text-danger';
+                      } else {
+                        $textcolor = "text-success";
                       }
-
-                      echo "<td>" . $nam . "</td>";
+                      echo "<td class='$textcolor'>" . $row['xacnhan'] . "</td>";
                       $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
                       echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
                       echo "<td>" . $row["mota"] . "</td>";
@@ -315,10 +307,10 @@ $kq = $conn->query($sql);
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>
                         </button>
-                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-pencil-square'></i>
+                        <button class='btn btn-sm btn-outline-success' onclick='xacnhan(\"" . $row["barcode"] . "\")'>
+                            <i class='bi bi-check-square-fill'></i>
                         </button>
-                        <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
+                        <button class='btn btn-outline-danger btn-sm' onclick='xoathongbao(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-trash-fill'></i>
                         </button>
                       </td>";
@@ -429,6 +421,24 @@ $kq = $conn->query($sql);
           <?php echo $toastthanhcong; ?>
         </div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalxacnhan" tabindex="-1" aria-labelledby="modalxacnhan" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalxacnhan">Xác nhận</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h4>Xác nhận?</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="button" class="btn btn-danger" id="btnxacnhan">Đồng ý</button>
+        </div>
       </div>
     </div>
   </div>

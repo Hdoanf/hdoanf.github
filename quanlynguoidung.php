@@ -84,7 +84,7 @@ $kq = $conn->query($sql);
                       </a>
                     </li>
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="baocaodichuyen.php">
+                      <a class="nav-link " href="tsdichuyen.php">
                         Báo cáo di chuyển tài sản
                       </a>
                     </li>

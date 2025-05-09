@@ -106,3 +106,75 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+let idthongbao = null;
+
+function xoathongbao(id) {
+  idcanxoa = id; // luu barcode vao bien nay 
+  var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
+  myModal.show();
+}
+
+
+document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
+  if (idcanxoa) {
+    fetch(`xoathongbao.php?id=${idcanxoa}`)
+      .then(response => response.text()) //lay du lieu xoa
+      .then(data => {
+        console.log(data);
+
+        // toast xoa
+        var toast = document.getElementById('toast');
+        var toastBody = document.getElementById('toastbd');
+        toastBody.innerHTML = "Xóa thành công";
+        var toast = new bootstrap.Toast(toast);
+        toast.show();
+
+        // an modal
+        var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoa'));
+        if (modal) modal.hide();
+
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      })
+      .catch(error => {
+        console.error("Lỗi:", error);
+      });
+  }
+});
+let idxacnhan = null;
+
+function xacnhan(id) {
+  idxacnhan = id; // luu barcode vao bien nay 
+  var myModal = new bootstrap.Modal(document.getElementById('modalxacnhan'));
+  myModal.show();
+}
+
+
+document.getElementById("btnxacnhan").addEventListener("click", function() {
+  if (idxacnhan) {
+    fetch(`xacnhan.php?id=${idxacnhan}`)
+      .then(response => response.text()) //lay du lieu xoa
+      .then(data => {
+        console.log(data);
+
+        // toast xoa
+        var toast = document.getElementById('toast');
+        var toastBody = document.getElementById('toastbd');
+        toastBody.innerHTML = "Thành công";
+        var toast = new bootstrap.Toast(toast);
+        toast.show();
+
+        // an modal
+        var modal = bootstrap.Modal.getInstance(document.getElementById('modalxacnhan'));
+        if (modal) modal.hide();
+
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      })
+      .catch(error => {
+        console.error("Lỗi:", error);
+      });
+  }
+});

@@ -148,6 +148,11 @@ $kq = $conn->query($sql);
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>
@@ -160,7 +165,7 @@ $kq = $conn->query($sql);
         <!-- chỗ tìm kiếm -->
         <div class="card mt-3">
           <div class="card-body">
-            <h2 class="card-title mb-4">Quản lý tài sản </h2>
+            <h2 class="card-title mb-4">Báo cáo hỏng</h2>
             <form class="row g-3 mb-4" method="GET">
               <div class="col-md-4">
                 <div class="input-group">
