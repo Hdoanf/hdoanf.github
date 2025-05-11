@@ -105,16 +105,6 @@ $kq = $conn->query($sql);
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="taisan.php">
-                Mục tài sản đã có sẵn
-              </a>
-            </li>
             <li class="nav-item nav-pills">
               <div>
                 <button class="btn nav-link active" type="button" data-bs-toggle="collapse"
@@ -136,21 +126,6 @@ $kq = $conn->query($sql);
                   </ul>
                 </div>
               </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="lichsu.php">
-                Lịch sử
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="kho.php">
-                Kho
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="hienthithongbao.php">
-                Thông Báo
-              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="">

@@ -17,7 +17,6 @@ $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
 echo "<script>console.log('$toastthanhcong')</script>";
 unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 
-
 $search = "";
 $loaits = "";
 $tinh_trang = "";

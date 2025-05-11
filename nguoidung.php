@@ -1,22 +1,31 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
+  header("Location: dangnhap.php");
+  exit();
+}
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
-
 $conn->set_charset('utf8mb4');
 
-session_start();
+// Lấy thông tin đơn vị của user từ session
+
+
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
 $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
-echo "<script>console.log('$toastthanhcong')</script>";
-unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
+unset($_SESSION['thanhcong'], $_SESSION['loi']);
 
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM full_information";
+$donvi = $_SESSION['donvi'];
+$sql = "SELECT * FROM full_information WHERE units = '$donvi'"; // Chỉ  tài sản thuộc đơn vị của user
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';

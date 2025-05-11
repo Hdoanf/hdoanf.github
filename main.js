@@ -142,6 +142,7 @@ document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
       });
   }
 });
+
 let idxacnhan = null;
 
 function xacnhan(id) {

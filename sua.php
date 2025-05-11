@@ -14,7 +14,7 @@ $conn->set_charset('utf8mb4');
 $sqlunits = "SELECT * FROM units
 ORDER BY
     CASE
-        WHEN units = 'Chưa phân lớp' THEN 0
+        WHEN units = 'Chưa phân' THEN 0
         ELSE 1
     END,
     units;
