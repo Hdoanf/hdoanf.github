@@ -13,8 +13,7 @@ $conn->set_charset('utf8mb4');
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `user_choices` WHERE 1=1
-          ORDER BY `user_choices`.`created_at` DESC ";
+$sql = "SELECT * FROM `user_choices` WHERE 1=1";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -32,13 +31,12 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
     }
   }
   if (!empty($loaits)) {
-    $sql .= " AND `product_category` = '$loaits'"; //nối
+    $sql .= " AND `product_category` = '$loaits' ORDER BY `user_choices`.`created_at` DESC "; //nối
   }
   if (!empty($tinh_trang)) {
-    $sql .= " AND `product_status` = '$tinh_trang'";
+    $sql .= " AND `product_status` = '$tinh_trang'ORDER BY `user_choices`.`created_at` DESC ";
   }
 }
-
 $kq = $conn->query($sql);
 ?>
 

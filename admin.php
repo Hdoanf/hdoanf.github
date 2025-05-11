@@ -60,7 +60,7 @@ $kq = $conn->query($sql);
   <title>Quản lý tài sản </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 
 <body>
@@ -224,7 +224,9 @@ $kq = $conn->query($sql);
               <div class="col-md-2">
                 <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
               </div>
-
+              <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="quetma()">Quét Mã Vạch</button>
+              </div>
             </div>
             <!-- bảng render từ database -->
             <div class="table-responsive " style="overflow-y:scroll;height:65vh;">
@@ -417,8 +419,29 @@ $kq = $conn->query($sql);
       </div>
     </div>
   </div>
+  <!--modal quetma --->
 
+  <div class="modal fade" id="modalscan" tabindex="-1" aria-labelledby="modalscan" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalbodyscan">
+          <!-- sau nay se duoc them vao bang js ben duoi -->
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">dangload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="main.js"></script>
+
+
 </body>
 
 </html>

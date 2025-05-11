@@ -178,3 +178,77 @@ document.getElementById("btnxacnhan").addEventListener("click", function() {
       });
   }
 });
+
+function quetma() {
+  // Hiển thị modal
+  var myModal = new bootstrap.Modal(document.getElementById('modalscan'));
+  myModal.show();
+
+  // Load nội dung quét mã với kích thước lớn hơn
+  document.getElementById("modalbodyscan").innerHTML = `
+    <div class="container-fluid">
+      <h4 class="text-center mb-4">Quét mã QR tài sản</h4>
+      <div class="d-flex justify-content-center">
+        <div id="qr-reader" style="width: 600px; max-width: 100%;"></div>
+      </div>
+      <div id="thong-tin-taisan" class="mt-4">
+        <!-- Tài sản quét được sẽ hiện ở đây -->
+      </div>
+      <div class="text-center mt-3">
+        <button class="btn btn-secondary" onclick="resetScanner()">
+          <i class="bi bi-arrow-repeat"></i> Quét lại
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Khởi tạo scanner với khung quét hình chữ nhật rộng hơn
+  const html5QrcodeScanner = new Html5QrcodeScanner(
+    "qr-reader", 
+    { 
+      fps: 10, 
+      qrbox: { width: 400, height: 200 } // Khung quét hình chữ nhật (rộng x cao)
+    },
+    /* verbose= */ false
+  );
+
+  // Biến lưu trữ scanner để có thể reset
+  window.currentScanner = html5QrcodeScanner;
+
+  function onScanSuccess(decodedText) {
+    // Xóa nội dung cũ
+    document.getElementById('thong-tin-taisan').innerHTML = `
+      <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Đang tải...</span>
+        </div>
+        <p>Đang tải thông tin tài sản...</p>
+      </div>
+    `;
+
+    // Gửi barcode lên server để lấy thông tin tài sản
+    fetch(`laytaisan.php?barcode=${encodeURIComponent(decodedText)}`)
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('thong-tin-taisan').innerHTML = html;
+        // Dừng quét sau khi thành công
+        html5QrcodeScanner.clear();
+      })
+      .catch(err => {
+        document.getElementById('thong-tin-taisan').innerHTML = `
+          <div class="alert alert-danger">
+            Lỗi khi lấy thông tin tài sản. Mã: ${decodedText}
+          </div>
+        `;
+      });
+  }
+
+  html5QrcodeScanner.render(onScanSuccess);
+}
+
+// Hàm reset scanner
+function resetScanner() {
+
+    quetma(); // Khởi tạo lại scanner nếu không có scanner hiện tại
+
+}

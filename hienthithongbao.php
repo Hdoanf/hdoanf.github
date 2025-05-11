@@ -246,7 +246,7 @@ $kq = $conn->query($sql);
                     <th>NHÓM TÀI SẢN</th>
                     <th>LOẠI TÀI SẢN</th>
                     <th>TÊN TÀI SẢN</th>
-                    <th>NĂM NHẬP</th>
+                    <th>SỬ LÝ</th>
                     <th>TRẠNG THÁI</th>
                     <th>THÔNG TIN TÀI SẢN THÔNG BÁO</th>
                     <th>NGAY THÔNG BÁO</th>
