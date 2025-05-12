@@ -154,7 +154,7 @@ $kq = $conn->query($sql);
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="caidat.php">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>
             </li>

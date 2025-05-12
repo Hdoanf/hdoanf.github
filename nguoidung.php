@@ -110,7 +110,7 @@ $kq = $conn->query($sql);
                 <div class="collapse" id="themtaisan">
                   <ul class="nav">
                     <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tshong.php">
+                      <a class="nav-link " href="tshonguser.php">
                         Báo cáo hỏng
                       </a>
                     </li>

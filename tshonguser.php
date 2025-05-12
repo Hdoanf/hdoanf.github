@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
+  header("Location: dangnhap.php");
+  exit();
+}
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -21,7 +28,9 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' ";
+$donvi = $_SESSION['donvi'];
+
+$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' AND units ='$donvi' ";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';

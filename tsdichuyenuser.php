@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
+  header("Location: dangnhap.php");
+  exit();
+}
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -21,7 +28,9 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE `old_unit` != '' ";
+$tinh_trang = "";
+$donvi = $_SESSION['donvi'];
+$sql = "SELECT * FROM `full_information` WHERE `old_unit` != '' and `units`='$donvi' ";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -82,7 +91,7 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Admin</p>
+                <p class="mb-0 ms-2">User</p>
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Thông tin</a></li>
@@ -119,7 +128,7 @@ $kq = $conn->query($sql);
                       </a>
                     </li>
                     <li class="nav-item ms-2 nav-pills"">
-                      <a class=" nav-link active" href=" baocaodichuyen.php">
+                      <a class=" nav-link active" href="tsdichuyenuser.php">
                       Báo cáo di chuyển tài sản
                       </a>
                     </li>
@@ -196,7 +205,7 @@ $kq = $conn->query($sql);
                 <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
               </div>
               <div class="col-md-2">
-                <a href="baocaodichuyen.php" class="btn btn-info w-100">Xuat bao cao</a>
+                <a href="baocaodichuyen.php" class="btn btn-info w-100">Xuất báo cáo</a>
               </div>
 
             </div>

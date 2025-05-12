@@ -21,7 +21,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE (`product_status`= 'pending' or `product_status`='inactive')";
+$sql = "SELECT * FROM `full_information` WHERE (`product_status`= 'pending' or `product_status`='inactive' or `product_status`='maintenance')";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';

@@ -100,26 +100,36 @@ $kq = $conn->query($sql);
       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
           <ul class="nav flex-column ">
-            <li class="nav-item">
-              <a class="nav-link" href="admin.php">
+            <li class="nav-item ">
+              <a class="nav-link " href="#">
                 <i class="bi bi-grid-1x2"></i> Tài sản
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="quanlynguoidung.php">
+                Quản lý người dùng
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="taisan.php">
+                Mục tài sản đã có sẵn
               </a>
             </li>
             <li class="nav-item nav-pills">
               <div>
                 <button class="btn nav-link active" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#baocao" aria-expanded="false" aria-controls="baocao">
+                  data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
                   Báo cáo
                 </button>
-                <div class="collapse" id="baocao">
+                <div class="collapse" id="themtaisan">
                   <ul class="nav">
-                    <li class="nav-item ms-2 ">
+                    <li class="nav-item ms-2 mt-1">
                       <a class="nav-link" href="tshong.php">
                         Báo cáo hỏng
                       </a>
                     </li>
                     <li class="nav-item ms-2 nav-pills">
-                      <a class="nav-link active " href="tsdichuyen.php">
+                      <a class="nav-link active" href="tsdichuyen.php">
                         Báo cáo di chuyển tài sản
                       </a>
                     </li>
@@ -128,13 +138,29 @@ $kq = $conn->query($sql);
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="lichsu.php">
+                Lịch sử
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="kho.php">
+                Kho
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="hienthithongbao.php">
+                Thông Báo
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="caidat.php">
                 <i class="bi bi-gear"></i> Cài đặt
               </a>
             </li>
           </ul>
         </div>
       </nav>
+
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <!-- chỗ tìm kiếm -->

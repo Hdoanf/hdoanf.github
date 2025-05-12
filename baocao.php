@@ -1,31 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+header("Content-Type: application/vnd.ms-excel");
+header("Content-Disposition: attachment; filename=baocao_taisan_hong.xls");
+header("Pragma: no-cache");
+header("Expires: 0");
 
-$phpWord = new \PhpOffice\PhpWord\PhpWord();
-$section = $phpWord->addSection();
-
-// Tiêu de
-$section->addText("TRƯỜNG ĐẠI HỌC", ['bold' => true], ['alignment' => 'center']);
-$section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", ['bold' => true], ['alignment' => 'center']);
-$section->addText("Độc lập - Tự do - Hạnh phúc", ['bold' => true], ['alignment' => 'center']);
-$section->addTextBreak(1);
-
-// Ngày tháng
-$section->addText("Hà Nội, ngày ........ tháng 03 năm 2025", [], ['alignment' => 'right']);
-$section->addTextBreak(1);
-
-// Tiêu đề báo cáo
-$section->addText("BÁO CÁO TÀI SẢN", ['bold' => true, 'size' => 14], ['alignment' => 'center']);
-$section->addTextBreak(1);
-
-// Thêm các thông tin cá nhân
-$section->addText("Họ và tên: .....................................................");
-$section->addText("Chức vụ: .....................................................");
-$section->addText("Bộ phận công tác: .....................................................");
-$section->addText("Thời gian thực hiện: .....................................................");
-$section->addTextBreak(1);
-
-// Kết nối CSDL
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -35,56 +13,73 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Kết nối thất bại: " . $conn->connect_error);
 }
+
 $conn->set_charset('utf8mb4');
 
-$sql = "SELECT * FROM `full_information` WHERE `product_status` LIKE 'maintenance'";
-$kq = $conn->query($sql);
+// phan quyen
+session_start();
+$role = $_SESSION['quyenhan'] ?? '';
+$unit = strtoupper($_SESSION['donvi'] ?? '');
 
-// Tạo bảng
-$styleTable = ['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 80];
-$phpWord->addTableStyle('AssetTable', $styleTable);
-$table = $section->addTable('AssetTable');
+$sql = "SELECT 
+            fi.barcode,
+            p.name_product AS product_name,
+            cp.name_category AS product_category,
+            fi.units,
+            fi.year_import,
+            fi.product_status,
+            fi.product_information,
+            fi.Warranty_Period,
+            gp.name_group AS product_group
+        FROM full_information fi
+        LEFT JOIN product p ON fi.product_name = p.id_product
+        LEFT JOIN category_product cp ON fi.product_category = cp.id_category
+        LEFT JOIN group_product gp ON fi.product_group = gp.id_group
+        WHERE (fi.product_status = 'maintenance' OR fi.product_status = 'inactive')";
 
-// Tiêu đề cột
-$table->addRow();
-$table->addCell(1000)->addText("STT");
-$table->addCell(2000)->addText("NGÀY");
-$table->addCell(4000)->addText("TÊN TÀI SẢN");
-$table->addCell(4000)->addText("ĐÁNH GIÁ CỦA PHỤ TRÁCH BỘ PHẬN");
-$table->addCell(4000)->addText("Don vi chiu trach nghiem");
-$table->addCell(4000)->addText("Ca nhan chiu trach nghiem");
-// Thêm dữ liệu vào bảng
-$stt = 1;
-while ($row = $kq->fetch_assoc()) {
-  $name = strtoupper($row["product_name"]);
-  $units = "Kho";
-  $date = date("Y/m/d");
-  $status = $row["product_status"];
-  $sat = "";
-  if ($status == "maintenance") {
-    $sat  = "Bao tri";
-  }
-  $table->addRow();
-  $table->addCell(1000)->addText($stt++);
-  $table->addCell(2000)->addText($date);
-  $table->addCell(4000)->addText($name);
-  $table->addCell(4000)->addText($sat);
-  $table->addCell(4000)->addText($units);
-  $table->addCell(4000)->addText("khong co");
+// loc User
+if ($role === 'user') {
+  $unit = $conn->real_escape_string($unit);
+  $sql .= " AND fi.units = '$unit'";
 }
 
-// Xuống dòng trước khi thêm chữ ký
-$section->addTextBreak(2);
+$result = $conn->query($sql);
 
-// Thêm dòng chữ ký
-$table = $section->addTable();
-$table->addRow();
-$table->addCell(5000)->addText("PHỤ TRÁCH BỘ PHẬN", ['bold' => true], ['alignment' => 'center']);
-$table->addCell(5000)->addText("NGƯỜI BÁO CÁO", ['bold' => true], ['alignment' => 'center']);
+//tao bang exel
+echo "<table border='1'>";
+echo "<tr>
+        <th>STT</th>
+        <th>NHÓM TÀI SẢN</th>
+        <th>LOẠI TÀI SẢN</th>
+        <th>TÊN TÀI SẢN</th>
+        <th>BARCODE</th>
+        <th>NĂM NHẬP</th>
+        <th>ĐƠN VỊ</th>
+        <th>THÔNG TIN TÀI SẢN</th>
+        <th>THỜI HẠN BẢO HÀNH</th>
+        <th>TÌNH TRẠNG</th>
+        <th>YÊU CẦU XỬ LÝ</th>
+      </tr>";
 
-// Xuất file Word
-header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="baocao.docx"');
+$stt = 1;
+while ($row = $result->fetch_assoc()) {
+  $yeu_cau = ($row['product_status'] == 'maintenance') ? 'BẢO TRÌ' : 'THANH LÝ';
 
-$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-$objWriter->save('php://output');
+  echo "<tr>
+            <td>{$stt}</td>
+            <td>{$row['product_group']}</td>
+            <td>{$row['product_category']}</td>
+            <td>{$row['product_name']}</td>
+            <td>{$row['barcode']}</td>
+            <td>{$row['year_import']}</td>
+            <td>{$row['units']}</td>
+            <td>{$row['product_information']}</td>
+            <td>{$row['Warranty_Period']}</td>
+            <td>{$row['product_status']}</td>
+            <td>{$yeu_cau}</td>
+          </tr>";
+  $stt++;
+}
+
+echo "</table>";
+$conn->close();
