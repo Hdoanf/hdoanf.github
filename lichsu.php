@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'admin') {
+  header("Location: dangnhap.php");
+  exit();
+}
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -75,10 +80,11 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Xin chào</p>
+                <p class="mb-0 ms-2"><?php $user = $_SESSION['user'];
+                                      echo $user ?></p>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Thông tin</a></li>
+
                 <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
               </ul>
             </div>

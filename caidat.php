@@ -83,10 +83,10 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Dashboard</p>
+                <p class="mb-0 ms-2"></p>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Thông tin</a></li>
+
                 <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
               </ul>
             </div>

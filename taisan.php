@@ -42,7 +42,17 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
             <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+            <div class="dropdown dropstart text-end">
+              <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
+                data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle mb-0 ms-2 "></i>
+                <p class="mb-0 ms-2"><?php $user = $_SESSION['user'];
+                                      echo $user ?></p>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="dangxuat.php">Đăng xuất</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>

@@ -15,8 +15,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 $conn->set_charset('utf8mb4');
 
 // Lấy thông tin đơn vị của user từ session
-
-
+$user = $_SESSION['user'];
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
 $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
 unset($_SESSION['thanhcong'], $_SESSION['loi']);
@@ -84,7 +83,16 @@ $kq = $conn->query($sql);
             <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+            <div class="dropdown dropstart text-end">
+              <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
+                data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle mb-0 ms-2 "></i>
+                <p class="mb-0 ms-2"><?php echo $user ?></p>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="dangxuat.php">Đăng xuất</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
