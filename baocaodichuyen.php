@@ -25,7 +25,7 @@ $conn->set_charset('utf8mb4');
 // phan quyen
 session_start();
 $role = $_SESSION['quyenhan'] ?? '';
-$unit = strtoupper($_SESSION['unit'] ?? '');
+$unit = strtoupper($_SESSION['donvi'] ?? '');
 
 $sql = "SELECT 
             fi.barcode,

@@ -274,7 +274,7 @@ $kq = $conn->query($sql);
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>
                         </button>
-                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["barcode"] . "\")'>
+                        <button class='btn btn-sm btn-outline-warning' onclick='xulykho(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-pencil-square'></i>
                         </button>
                         <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
@@ -342,14 +342,14 @@ $kq = $conn->query($sql);
     </div>
   </div>
   <!--modal suataisan --->
-  <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
+  <div class="modal fade" id="modalxulykho" tabindex="-1" aria-labelledby="modalxulykho" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modal"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="modalbodysua">
+        <div class="modal-body" id="modalbodyxulykho">
           <!-- sau nay se duoc them vao bang js ben duoi -->
           <div class="text-center">
             <div class="spinner-border text-primary" role="status">
@@ -361,25 +361,6 @@ $kq = $conn->query($sql);
     </div>
   </div>
 
-  <!--modal themtaisanmoi --->
-  <div class="modal fade" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbodythem">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- toast template -->
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
     <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -393,6 +374,21 @@ $kq = $conn->query($sql);
   </div>
 
   <script src="main.js"></script>
+  <script>
+    function xulykho(id) {
+      var myModal = new bootstrap.Modal(document.getElementById('modalxulykho'));
+      myModal.show();
+      fetch(`xulykho.php?id=${id}`)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("modalbodyxulykho").innerHTML = data;
+        })
+        .catch(error => {
+          console.log(error)
+          document.getElementById("modalbodyxulykho").innerHTML = '<p class="text-danger">Lỗi</p>';
+        });
+    }
+  </script>
 </body>
 
 </html>

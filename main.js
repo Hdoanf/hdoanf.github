@@ -188,7 +188,7 @@ function quetma() {
   // Load nội dung quét mã với kích thước lớn hơn
   document.getElementById("modalbodyscan").innerHTML = `
     <div class="container-fluid">
-      <h4 class="text-center mb-4">Quét mã QR tài sản</h4>
+      <h4 class="text-center mb-4">Quét mã tài sản</h4>
       <div class="d-flex justify-content-center">
         <div id="qr-reader" style="width: 600px; max-width: 100%;"></div>
       </div>
@@ -249,7 +249,5 @@ function quetma() {
 
 // Hàm reset scanner
 function resetScanner() {
-
     quetma(); // Khởi tạo lại scanner nếu không có scanner hiện tại
-
 }

@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
               </div>
               <div class="mb-3">
-                <label class="form-label">Năm nhập hàng</label>
+                <label class="form-label">Năm nhập</label>
                 <select class="form-select" name="year_import">
                   <?php foreach ($kqyear as $year) {
                     echo "<option value='{$year["id_year"]}'>" . $year["year_import"] . "</option>";

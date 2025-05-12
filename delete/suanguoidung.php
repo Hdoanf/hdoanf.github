@@ -97,8 +97,8 @@ if (isset($_POST['submit'])) {
       <div class="mb-3 mt-3">
         <label class="form-label">Phân quyền :</label>
         <select class="form-select" name="use_role">
-          <option value="admin" <?php echo ($role == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-          <option value="user" <?php echo ($role == 'User') ? 'selected' : ''; ?>>User</option>
+          <option value="admin" <?php echo ($role == 'admin') ? 'selected' : ''; ?>>admin</option>
+          <option value="user" <?php echo ($role == 'user') ? 'selected' : ''; ?>>user</option>
         </select>
       </div>
 

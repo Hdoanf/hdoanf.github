@@ -60,6 +60,16 @@ $kq = $conn->query($sql);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    .modalcao {
+      z-index: 1060 !important;
+
+    }
+
+    .modal-backdropcao {
+      z-index: 1050 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -331,7 +341,7 @@ $kq = $conn->query($sql);
   <!-- </footer> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- modal hien chitiet-->
-  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+  <div class="modal fade modalcao" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -351,7 +361,7 @@ $kq = $conn->query($sql);
   </div>
 
   <!-- modalXoa -->
-  <div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
+  <div class="modal fade  modalcao" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -369,7 +379,7 @@ $kq = $conn->query($sql);
     </div>
   </div>
   <!--modal suataisan --->
-  <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
+  <div class="modal fade modalcao" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -389,7 +399,7 @@ $kq = $conn->query($sql);
   </div>
 
   <!--modal themtaisanmoi --->
-  <div class="modal fade" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
+  <div class="modal fade  modalcao" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -408,7 +418,7 @@ $kq = $conn->query($sql);
     </div>
   </div>
   <!-- toast template -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div class="position-fixed bottom-0 end-0 p-3  modalcao" style="z-index: 11">
     <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body" id="toastbd">
@@ -438,6 +448,7 @@ $kq = $conn->query($sql);
       </div>
     </div>
   </div>
+
   <script src="main.js"></script>
 
 

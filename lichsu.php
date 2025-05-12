@@ -31,12 +31,13 @@ if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtra
     }
   }
   if (!empty($loaits)) {
-    $sql .= " AND `product_category` = '$loaits' ORDER BY `user_choices`.`created_at` DESC "; //nối
+    $sql .= " AND `product_category` = '$loaits'"; //nối
   }
   if (!empty($tinh_trang)) {
-    $sql .= " AND `product_status` = '$tinh_trang'ORDER BY `user_choices`.`created_at` DESC ";
+    $sql .= " AND `product_status` = '$tinh_trang'";
   }
 }
+$sql .= " ORDER BY `user_choices`.`created_at` DESC";
 $kq = $conn->query($sql);
 ?>
 

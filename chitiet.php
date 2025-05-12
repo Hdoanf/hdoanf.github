@@ -85,7 +85,7 @@ if ($result->num_rows > 0) {
         ?>
       </tr>
       <tr>
-        <th>Ngày Cập Nhập</th>
+        <th>Năm Nhập</th>
         <?php $nam = '';
         $strnam = $conn->real_escape_string($row["year_import"]);
         $kqnam = $conn->query("SELECT * FROM `year_import` WHERE `id_year`LIKE '$strnam' ");

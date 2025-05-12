@@ -64,7 +64,7 @@ $kq = $conn->query($sql);
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="admin.php">
         <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
           height="30" class="d-inline-block align-text-top me-2" alt="Logo">
         Quản lý tài sản của admin

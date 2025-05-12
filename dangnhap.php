@@ -14,7 +14,7 @@ if (isset($_POST["usn"]) && isset($_POST["pass"])) {
   $result = $conn->query($sql);
 
   if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc(); // Giữ nguyên mảng
+    $user = $result->fetch_assoc();
     session_start();
     $_SESSION['user'] = $user['username'];
     $_SESSION['quyenhan'] = $user['use_role']; // admin hoặc user
@@ -176,6 +176,7 @@ if (isset($_POST["usn"]) && isset($_POST["pass"])) {
       <div class="login-card">
         <div class="login-header">
           <div class="logo">
+            <img src="https://daihochoabinh.edu.vn/wp-content/uploads/2024/07/dc2c4115-94cb-46d8-a536-7e1d53886802.png" width="50">
           </div>
           <h2 class="mb-0">ĐĂNG NHẬP HỆ THỐNG</h2>
         </div>

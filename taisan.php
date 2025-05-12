@@ -316,7 +316,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
   let tscanxoa = null;
 
   function xoa(id) {
-    tscanxoa = id; // luu barcode vao bien nay 
+    tscanxoa = id; // luu vao bien nay 
     var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
     myModal.show();
   }
