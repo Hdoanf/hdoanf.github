@@ -12,13 +12,13 @@ if ($conn->connect_error) {
 
 $getid = $_GET['id'];
 $id = $conn->real_escape_string($getid);
-$sql = "DELETE FROM `category_product` WHERE `id_category` LIKE '$id' ";
+$sql = "DELETE FROM `category_product` WHERE `id_category` = '$id' ";
 $kq = $conn->query($sql);
-// session_start();
-// if ($kq) {
-//   $_SESSION['xoathanhcong'] = "Xoá thành công";
-// } else {
-//   $_SESSION['loi'] = "Xoá lỗi";
-// }
-// header("Location: admin.php");
-// exit();
+session_start();
+if ($kq) {
+  $_SESSION['xoathanhcong'] = "Xoá thành công";
+} else {
+  $_SESSION['loi'] = "Xoá lỗi";
+}
+header("Location: admin.php");
+exit();

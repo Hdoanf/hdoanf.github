@@ -142,7 +142,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                   echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowcate["name_category"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_category"] . "\")'>
                       <i class='bi bi-trash-fill'></i>
                         </button>";
                   echo "</div>";
@@ -251,10 +251,9 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
     </div>
   </div>
 </div>
-<!-- toast -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
-    aria-atomic="true">
+<!-- toast template -->
+<div class="position-fixed bottom-0 end-0 p-3  modalcao" style="z-index: 11">
+  <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body" id="toastbd">
         <?php echo $toastthanhcong; ?>
@@ -263,6 +262,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
     </div>
   </div>
 </div>
+
 <!-- modalXoa -->
 <div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -322,11 +322,10 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
     }
   });
 
-
   let tscanxoa = null;
 
   function xoa(id) {
-    tscanxoa = id; // luu vao bien nay 
+    tscanxoa = id; // luu barcode vao bien nay 
     var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
     myModal.show();
   }
@@ -335,7 +334,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
   document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
     if (tscanxoa) {
       fetch(`delete/xoa_all.php?id=${tscanxoa}`)
-        .then(AuthenticatorAssertionResponse => response.text()) //lay du lieu xoa
+        .then(response => response.text()) //lay du lieu xoa
         .then(data => {
           console.log(data);
 

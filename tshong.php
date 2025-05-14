@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'admin') {
+if ($_SESSION['admin'] !== 'admin') {
   header("Location: dangnhap.php");
   exit();
 }

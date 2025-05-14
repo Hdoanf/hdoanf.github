@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
     <form method="post" action="xulykho.php?id=<?php echo $id; ?>">
 
       <div class="mb-3 mt-3">
-        <label class="form-label">Trạng thái :</label>
+        <label class="form-label">Trạng thái đã qua sử lý:</label>
         <select class="form-select" name="status">
           <?php foreach ($kqstatus as $sta) {
             $selected = ($sta["status_product"] == $st) ? "selected" : "";

@@ -1,4 +1,14 @@
 <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+  header("Location: dangnhap.php");
+  exit();
+}
+$admin = $_SESSION['quyenhan'];
+$user = $_SESSION['quyenhan'];
+$hide = ($user == 'user') ? $hide = 'd-none' : $hide = '';
+$hideadmin = ($admin == 'admin') ? $hideadmin = 'd-none' : $hideadmin = '';
+
 $conn = new mysqli("localhost", "root", "", "barcode");
 $conn->set_charset('utf8mb4');
 
@@ -53,14 +63,13 @@ if ($kq && $kq->num_rows > 0):
   </head>
   <<style>
     .modal {
-    z-index: 1050; /* Đảm bảo cao hơn các phần tử khác */
+    z-index: 1050;
     }
 
     .btn-outline-primary, .btn-outline-danger, .btn-outline-warning, .btn-outline-info {
     margin: 2px; /* Tạo khoảng cách giữa các nút */
     }
 
-    /* Đảm bảo modal không bị che khuất */
     .modal-backdrop {
     z-index: 1040;
     }
@@ -97,14 +106,14 @@ if ($kq && $kq->num_rows > 0):
                 <button class="btn btn-outline-info btn-sm" onclick="xemchitiet('<?= $row['barcode'] ?>')">
                   <i class="bi bi-eye"></i>
                 </button>
-                <button class="btn btn-outline-warning btn-sm" onclick="suataisan('<?= $row['barcode'] ?>')">
-                  <i class="bi bi-pencil-square"></i>
+                <button class="btn btn-outline-warning btn-sm <?= $hide ?>" onclick="suataisan('<?= $row['barcode'] ?>')">
+                  <i class="bi bi-pencil-square <?= $hide ?>"></i>
                 </button>
-                <button class="btn btn-outline-danger btn-sm" onclick="xoa('<?= $row['barcode'] ?>')">
-                  <i class="bi bi-trash-fill"></i>
+                <button class="btn btn-outline-danger btn-sm <?= $hide ?>" onclick="xoa('<?= $row['barcode'] ?>')">
+                  <i class="bi bi-trash-fill <?= $hide ?>"></i>
                 </button>
-                <button class="btn btn-outline-primary btn-sm mt-2" onclick="thongbao('<?= $row['barcode'] ?>')">
-                  <i class="bi bi-exclamation-triangle-fill"></i> Thông báo hỏng
+                <button class="btn btn-outline-primary btn-sm  <?= $hideadmin ?>" onclick="thongbao('<?= $row['barcode'] ?>')">
+                  <i class="bi bi-exclamation-triangle-fill  <?= $hideadmin ?>"></i>
                 </button>
               </td>
             </tr>
