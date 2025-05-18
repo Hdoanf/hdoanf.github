@@ -71,7 +71,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
             </li>
             <li class="nav-item">
               <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
+                Quản lý người dùng/Khoa
               </a>
             </li>
             <li class="nav-item nav-pills">
@@ -135,6 +135,11 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
               $kqcate = $conn->query($cate);
               if ($kqcate->num_rows > 0) {
                 while ($rowcate = $kqcate->fetch_assoc()) {
+                  $category_product = $conn->real_escape_string($rowcate['id_category']);
+                  $disbtncate = "SELECT * FROM `full_information` WHERE `product_category` = '$category_product'";
+                  $qry = $conn->query($disbtncate);
+                  $disable = ($qry->num_rows) ? "disabled" : "";
+
                   echo "<div class='card' style='width: 12rem;'>";
                   echo "<div class='card-body'>";
                   echo "<ul class='list-group list-group-flush' >";
@@ -142,7 +147,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                   echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowcate["name_category"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_category"] . "\")'>
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_category"] . "\")'$disable>
                       <i class='bi bi-trash-fill'></i>
                         </button>";
                   echo "</div>";
@@ -170,6 +175,10 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
               $kqgroup = $conn->query($group);
               if ($kqgroup->num_rows > 0) {
                 while ($rowgroup = $kqgroup->fetch_assoc()) {
+                  $group_product = $conn->real_escape_string($rowgroup['id_group']);
+                  $disbtngr = "SELECT * FROM `full_information` WHERE `product_group` ='$group_product' ";
+                  $qry = $conn->query($disbtngr);
+                  $disable = ($qry->num_rows) ? "disabled" : "";
                   echo "<div class='card' style='width: 12rem;'>";
                   echo "<div class='card-body'>";
                   echo "<ul class='list-group list-group-flush'>";
@@ -177,7 +186,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                   echo "<li class='list-group-item'>Name: " . htmlspecialchars($rowgroup["name_group"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_group"] . "\")'>
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_group"] . "\")'$disable>
                       <i class='bi bi-trash-fill'></i>
                         </button>";
                   echo "</div>";
@@ -205,6 +214,10 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
               $kqproduct = $conn->query($product);
               if ($kqproduct->num_rows > 0) {
                 while ($rowproduct = $kqproduct->fetch_assoc()) {
+                  $product = $conn->real_escape_string($rowproduct['id_product']);
+                  $disbtnpro = "SELECT * FROM `full_information` WHERE `product_name`='$product'";
+                  $qry = $conn->query($disbtnpro);
+                  $disable = ($qry->num_rows) ? "disabled" : "";
                   echo "<div class='card' style='width: 12rem;'>";
                   echo "<div class='card-body'>";
                   echo "<ul class='list-group list-group-flush'>";
@@ -212,7 +225,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                   echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowproduct["name_product"]) . "</li>";
                   echo "</ul>";
                   echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'$disable>
                       <i class='bi bi-trash-fill'></i>
                         </button>";
                   echo "</div>";

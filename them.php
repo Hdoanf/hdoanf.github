@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input required type="date" class="form-control" name="thoihan_baohanh">
               </div>
               <div class="mb-3">
-                <label class="form-label">Thông tin sản phẩm</label>
+                <label class="form-label">Thông tin tài sản</label>
                 <textarea class="form-control" name="thongtin"></textarea>
               </div>
             </div>

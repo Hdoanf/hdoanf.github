@@ -129,7 +129,7 @@ $kq = $conn->query($sql);
             </li>
             <li class="nav-item">
               <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
+                Quản lý người dùng/Khoa
               </a>
             </li>
             <li class="nav-item">
