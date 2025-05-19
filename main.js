@@ -185,7 +185,6 @@ function quetma() {
   var myModal = new bootstrap.Modal(document.getElementById('modalscan'));
   myModal.show();
 
-  // Load nội dung quét mã với kích thước lớn hơn
   document.getElementById("modalbodyscan").innerHTML = `
     <div class="container-fluid">
       <h4 class="text-center mb-4">Quét mã tài sản</h4>
@@ -203,7 +202,7 @@ function quetma() {
     </div>
   `;
 
-  // Khởi tạo scanner với khung quét hình chữ nhật rộng hơn
+  // Khởi tạo scanner với khung quét hình chữ nhật 
   const html5QrcodeScanner = new Html5QrcodeScanner(
     "qr-reader", 
     { 
@@ -245,9 +244,10 @@ function quetma() {
   }
 
   html5QrcodeScanner.render(onScanSuccess);
-}
+  // Hàm reset scanner
 
-// Hàm reset scanner
+}
 function resetScanner() {
     quetma(); // Khởi tạo lại scanner nếu không có scanner hiện tại
 }
+

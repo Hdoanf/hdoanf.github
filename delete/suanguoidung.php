@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
   $username = $_POST['usn'];
   $donvi = $_POST['units'];
   $quyen = $_POST['use_role'];
-  $mk = $_POST['pass']; // sửa đúng tên biến input
+  $mk = $_POST['pass'];
 
   // Cập nhật
   $update = "UPDATE `user_account` SET 

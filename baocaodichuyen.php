@@ -3,11 +3,11 @@ header("Content-Type: application/vnd.ms-excel");
 header("Content-Disposition: attachment; filename=baocao_taisan_dadichuyen.xls");
 header("Pragma: no-cache");
 header("Expires: 0");
-session_start();
-if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
-  header("Location: dangnhap.php");
-  exit();
-}
+// session_start();
+// if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
+//   header("Location: dangnhap.php");
+//   exit();
+// }
 
 
 $servername = "localhost";

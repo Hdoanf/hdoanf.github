@@ -8,5 +8,5 @@ composer require picqer/php-barcode-generator
 ```
 2 php word
 ```
-composer require phpoffice/phpword
+composer require phpoffice/phpreadsheet
  ```

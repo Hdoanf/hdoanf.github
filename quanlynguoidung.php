@@ -5,11 +5,12 @@ $password = "";
 $dbname = "barcode";
 $conn = new mysqli($servername, $username, $password, $dbname);
 $conn->set_charset('utf8mb4');
-$search = "";
-$loaits = "";
-$tinh_trang = "";
+
+
 $sql = "SELECT * FROM `user_account`";
 $kq = $conn->query($sql);
+$sqlunits = "SELECT * FROM `units`";
+$kqunits = $conn->query($sqlunits);
 
 session_start();
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
@@ -50,7 +51,17 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
             <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+            <div class="dropdown dropstart text-end">
+              <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
+                data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle mb-0 ms-2 "></i>
+                <p class="mb-0 ms-2"><?php $user = $_SESSION['user'];
+                                      echo $user ?></p>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="dangxuat.php">Đăng xuất</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
@@ -69,7 +80,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
             </li>
             <li class="nav-item nav-pills ">
               <a class="nav-link active" href="quanlynguoidung.php">
-                Quản lý người dùng
+                Quản lý người dùng/Khoa
               </a>
             </li>
             <li class="nav-item">
@@ -152,7 +163,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                     while ($row = $kq->fetch_assoc()) {
                       echo "<tr>";
                       echo "<td>" . $tt . "</td>";
-                      echo "<td>" . $row["id"] . "</td>";
+                      echo "<td>" . $row["name"] . "</td>";
                       echo "<td>" . $row["username"] . "</td>";
                       echo "<td>" . $row["user_password"] . "</td>";
                       echo "<td>" . $row["use_role"] . "</td>";
@@ -177,6 +188,62 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
             </div>
           </div>
         </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-start align-items-center">
+              <h1 class="text-center mb-2">Quản lý khoa</h1>
+            </div>
+            <!-- bảng render từ database -->
+            <div class="table-responsive">
+              <table class="table table-hover text-center">
+                <thead class="table-light">
+                  <tr>
+                    <th>TT</th>
+                    <th>TÊN KHOA</th>
+                    <th>MÃ KHOA</th>
+                    <th>TÁC VỤ</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <?php
+                  $ttkhoa = 1;
+
+                  if ($kqunits->num_rows > 0) {
+                    while ($rowunits = $kqunits->fetch_assoc()) {
+                      $id_units = $conn->real_escape_string($rowunits['id_units']);
+                      $disbtnkhoa = "SELECT units FROM `full_information` WHERE `units` = '$id_units'";
+                      $qry = $conn->query($disbtnkhoa);
+                      $disable = ($qry->num_rows) ? "disabled" : "";
+
+                      echo "<tr>";
+                      echo "<td>" . $ttkhoa . "</td>";
+                      echo "<td>" . $rowunits["units"] . "</td>";
+                      echo "<td>" . $rowunits["id_units"] . "</td>";
+                      echo "<td> 
+                      <button class='btn btn-sm btn-outline-warning' onclick='suakhoa(\"" . $rowunits["id_units"] . "\")' $disable>
+                          <i class='bi bi-pencil-square'></i>
+                      </button>
+                      <button class='btn btn-outline-danger btn-sm' onclick='xoakhoa(\"" . $rowunits["id_units"] . "\")' $disable>
+                          <i class='bi bi-trash-fill'></i>
+                      </button>
+                    </td>";
+                      $ttkhoa++;
+                      echo "</tr>";
+                    }
+                  } else {
+                    echo "<tr><td colspan='7'>Không có dữ liệu</td></tr>";
+                  }
+                  ?>
+                </tbody>
+                <div class="col-md-2 mb-3">
+                  <button class="btn btn-primary w-100" onclick="themkhoa()">Thêm khoa</button>
+                </div>
+              </table>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
@@ -188,6 +255,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 </footer> -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -297,6 +365,112 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
         toast.show();
       }
     });
+  </script>
+
+
+  <div class="modal fade" id="modalXoakhoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalXoaLabel">Xác nhận xóa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h4>Bạn có chắc chắn muốn xóa không?</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="button" class="btn btn-danger" id="btnXacNhanXoakhoa">Đồng ý</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade  modalcao" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalbodythem">
+          <!-- sau nay se duoc them vao bang js ben duoi -->
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">dangload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let idxoakhoa = null;
+
+    function xoakhoa(idkhoa) {
+      idxoakhoa = idkhoa; // luu barcode vao bien nay 
+      var myModal = new bootstrap.Modal(document.getElementById('modalXoakhoa'));
+      console.log(myModal);
+      myModal.show();
+    }
+
+
+    document.getElementById("btnXacNhanXoakhoa").addEventListener("click", function() {
+      if (idxoakhoa) {
+        fetch(`delete/xoakhoa.php?id=${idxoakhoa}`)
+          .then(response => response.text()) //lay du lieu xoa
+          .then(data => {
+            console.log(data);
+
+            // toast xoa
+            var toast = document.getElementById('toast');
+            var toastBody = document.getElementById('toastbd');
+            toastBody.innerHTML = "Xóa thành công";
+            var toast = new bootstrap.Toast(toast);
+            toast.show();
+
+            // an modal
+            var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoakhoa'));
+            if (modal) modal.hide();
+
+            setTimeout(() => {
+              location.reload();
+            }, 1500);
+          })
+          .catch(error => {
+            console.error("Lỗi:", error);
+          });
+      }
+    });
+
+    function suakhoa(id) {
+      var myModal = new bootstrap.Modal(document.getElementById('modalSua'));
+      myModal.show();
+      fetch(`delete/suakhoa.php?id=${id}`)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("modalbodysua").innerHTML = data;
+        })
+        .catch(error => {
+          console.log(error)
+          document.getElementById("modalbodysua").innerHTML = '<p class="text-danger">Lỗi</p>';
+        });
+    }
+
+    function themkhoa() {
+      var myModal = new bootstrap.Modal(document.getElementById('modalThem'));
+      myModal.show();
+      fetch(`them/themkhoa.php`)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("modalbodythem").innerHTML = data;
+        })
+        .catch(error => {
+          console.log(error)
+          document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
+        });
+    }
   </script>
 </body>
 

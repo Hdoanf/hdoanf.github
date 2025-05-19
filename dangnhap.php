@@ -23,6 +23,7 @@ if (isset($_POST["usn"]) && isset($_POST["pass"])) {
     if ($user['use_role'] === "user") {
       header("Location: nguoidung.php");
     } else {
+      $_SESSION['admin'] = $user['use_role'];
       header("Location: admin.php");
     }
     exit();

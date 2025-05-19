@@ -15,8 +15,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 $conn->set_charset('utf8mb4');
 
 // Lấy thông tin đơn vị của user từ session
-
-
+$user = $_SESSION['user'];
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
 $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
 unset($_SESSION['thanhcong'], $_SESSION['loi']);
@@ -64,7 +63,18 @@ $kq = $conn->query($sql);
   <title>Quản lý tài sản </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <link rel="stylesheet" href="index.css">
+  <style>
+    .modalcao {
+      z-index: 1060 !important;
+
+    }
+
+    .modal-backdropcao {
+      z-index: 1050 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -84,7 +94,16 @@ $kq = $conn->query($sql);
             <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+            <div class="dropdown dropstart text-end">
+              <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
+                data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle mb-0 ms-2 "></i>
+                <p class="mb-0 ms-2"><?php echo $user ?></p>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="dangxuat.php">Đăng xuất</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
@@ -147,16 +166,18 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản</option>
+                  <option value="">Loại Tài sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
                     while ($rowloai = $loai->fetch_assoc()) {
-                      $kqloai = $conn->query("SELECT * FROM `category_product`
-                                        WHERE `id_category`=" . $rowloai['product_category'] . "");
+                      $kqloai = $conn->query(
+                        "SELECT * FROM `category_product`
+                                        WHERE `id_category`=" . $rowloai['product_category'] . ""
+                      );
                       $rownameloai = $kqloai->fetch_assoc();
                       $select = ($rowloai['product_category'] == $loaits) ? "selected" : "";
-                      echo "<script>console.log('$select')</script>";
+                      // echo "<script>console.log('$select')</script>";
                       echo "<option value='" . $rowloai['product_category'] . "' $select >
                                             " . $rownameloai['name_category'] . "</option>";
                     }
@@ -179,16 +200,18 @@ $kq = $conn->query($sql);
                   ?>
                 </select>
               </div>
-              <div class="row g-2 mb-4">
-                <div class="col-md-2">
-                  <button type="submit" class="btn btn-primary w-100">Tìm kiếm </button>
-                </div>
-                <div class="col-md-1">
-                  <a href="nguoidung.php" class="btn btn-danger w-100">Xóa</a>
-                </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
               </div>
-
             </form>
+            <div class="row g-2 mb-4">
+              <div class="col-md-2">
+                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="quetma()">Quét Mã Vạch</button>
+              </div>
+            </div>
             <!-- bảng render từ database -->
             <div class="table-responsive" style="overflow-y:scroll;height:65vh;">
               <table class="table table-hover text-center">
@@ -287,7 +310,7 @@ $kq = $conn->query($sql);
     </footer> -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+  <div class="modal fade modalcao" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -306,7 +329,7 @@ $kq = $conn->query($sql);
     </div>
   </div>
   <!-- thongbao -->
-  <div class="modal fade" id="modalthongbao" tabindex="-1" aria-labelledby="modalthongbao" aria-hidden="true">
+  <div class="modal fade modalcao" id="modalthongbao" tabindex="-1" aria-labelledby="modalthongbao" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -327,7 +350,7 @@ $kq = $conn->query($sql);
 
 
   <!-- modalXoa -->
-  <div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
+  <div class="modal fade modalcao" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -344,9 +367,8 @@ $kq = $conn->query($sql);
       </div>
     </div>
   </div>
-
   <!-- toast template -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div class="position-fixed bottom-0 end-0 p-3  modalcao" style="z-index: 11">
     <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body" id="toastbd">
@@ -356,6 +378,27 @@ $kq = $conn->query($sql);
       </div>
     </div>
   </div>
+  <!--modal quetma --->
+
+  <div class="modal fade" id="modalscan" tabindex="-1" aria-labelledby="modalscan" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalbodyscan">
+          <!-- sau nay se duoc them vao bang js ben duoi -->
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">dangload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <script src="main.js"></script>
 </body>

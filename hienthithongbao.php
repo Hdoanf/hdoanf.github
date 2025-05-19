@@ -1,5 +1,9 @@
 <?php
-
+session_start();
+if ($_SESSION['admin'] !== 'admin') {
+  header("Location: dangnhap.php");
+  exit();
+}
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -99,10 +103,11 @@ $kq = $conn->query($sql);
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Dashboard</p>
+                <p class="mb-0 ms-2"><?php $user = $_SESSION['user'];
+                                      echo $user ?></p>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Thông tin</a></li>
+
                 <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
               </ul>
             </div>
@@ -124,7 +129,7 @@ $kq = $conn->query($sql);
             </li>
             <li class="nav-item">
               <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
+                Quản lý người dùng/Khoa
               </a>
             </li>
             <li class="nav-item">

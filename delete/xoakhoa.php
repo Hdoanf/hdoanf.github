@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 
 $getid = $_GET['id'];
 $id = $conn->real_escape_string($getid);
-$sql = "DELETE FROM `category_product` WHERE `id_category` = '$id' ";
+$sql = "DELETE FROM `units` WHERE `id_units` LIKE '$id' ";
 $kq = $conn->query($sql);
 session_start();
 if ($kq) {
@@ -20,5 +20,5 @@ if ($kq) {
 } else {
   $_SESSION['loi'] = "Xoá lỗi";
 }
-header("Location: admin.php");
+header("Location: quanlynguoidung.php");
 exit();
