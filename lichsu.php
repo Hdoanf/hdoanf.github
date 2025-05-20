@@ -230,8 +230,9 @@ $kq = $conn->query($sql);
                     <th>LOẠI TÀI SẢN</th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
-                    <th>TRẠNG THÁI</th>
+                    <th>TRẠNG THÁI</th>ÁC
                     <th>THÔNG TIN TÀI SẢN</th>
+                    <th>THAO TÁC</th>
                     <th>Đơn vị </th>
                     <th>TÁC VỤ</th>
                   </tr>
@@ -288,6 +289,7 @@ $kq = $conn->query($sql);
                       $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
                       echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
                       echo "<td>" . $row["product_information"] . "</td>";
+                      echo "<td>" . $row["ac"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
                       echo "<td> 
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
