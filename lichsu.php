@@ -176,7 +176,7 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản </option>
+                  <option value="">Phân Loại Tài Sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM user_choices");
                   if ($loai->num_rows > 0) {
@@ -227,10 +227,10 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>LOẠI TÀI SẢN</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
-                    <th>TRẠNG THÁI</th>ÁC
+                    <th>TRẠNG THÁI</th>
                     <th>THÔNG TIN TÀI SẢN</th>
                     <th>THAO TÁC</th>
                     <th>Đơn vị </th>
@@ -296,9 +296,9 @@ $kq = $conn->query($sql);
                             <i class='bi bi-eye'></i>
                         </button>
                       
-                        <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-trash-fill'></i>
-                        </button>
+                        <!-- <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'> -->
+                        <!--     <i class='bi bi-trash-fill'></i> -->
+                        <!-- </button> -->
                       </td>";
 
                       $tt++;

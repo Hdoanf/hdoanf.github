@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
               </div>
               <div class="mb-3">
-                <label class="form-label">Loại tài sản</label>
+                <label class="form-label">Phân loại tài sản</label>
                 <select class="form-select" name="product_category">
                   <?php foreach ($kqcate as $cate) {
                     echo "<option value='{$cate["id_category"]}'>" . $cate["name_category"] . "</option>";

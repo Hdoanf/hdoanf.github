@@ -27,7 +27,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 $search = "";
 $loaits = "";
 $tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' ";
+$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' or `product_status` = 'inactive'";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -81,7 +81,7 @@ $kq = $conn->query($sql);
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
+            <a class="nav-link active" href=""><i class="bi bi-house-door"></i> Dashboard</a>
           </li>
           <li class="nav-item">
             <div class="dropdown dropstart text-end">
@@ -108,7 +108,7 @@ $kq = $conn->query($sql);
         <div class="position-sticky pt-3">
           <ul class="nav flex-column ">
             <li class="nav-item ">
-              <a class="nav-link " href="#">
+              <a class="nav-link " href="admin.php">
                 <i class="bi bi-grid-1x2"></i> Tài sản
               </a>
             </li>
@@ -183,7 +183,7 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản </option>
+                  <option value="">Phân Loại Tài Sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
@@ -237,7 +237,7 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>LOẠI TÀI SẢN</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>

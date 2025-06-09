@@ -4,7 +4,8 @@ if (!isset($_SESSION['user'])) {
   header("Location: dangnhap.php");
   exit();
 }
-$admin = $_SESSION['quyenhan'];
+
+$admin = $_SESSION['admin'];
 $user = $_SESSION['quyenhan'];
 $hide = ($user == 'user') ? $hide = 'd-none' : $hide = '';
 $hideadmin = ($admin == 'admin') ? $hideadmin = 'd-none' : $hideadmin = '';
@@ -83,7 +84,7 @@ if ($kq && $kq->num_rows > 0):
             <tr>
               <th>TT</th>
               <th>NHÓM TÀI SẢN</th>
-              <th>LOẠI TÀI SẢN</th>
+              <th>PHÂN LOẠI TÀI SẢN </th>
               <th>TÊN TÀI SẢN</th>
               <th>NĂM NHẬP</th>
               <th>TRẠNG THÁI</th>

@@ -166,7 +166,7 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản </option>
+                  <option value="">Phân Loại Tài Sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
@@ -219,7 +219,7 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>LOẠI TÀI SẢN</th>
+                    <th>PHÂN LOẠI TÀI SẢN	</th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>

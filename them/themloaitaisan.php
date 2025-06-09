@@ -46,7 +46,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thêm Loại Tài Sản</title>
+  <title>Thêm Phân Loại Tài Sản</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -80,7 +80,7 @@ $conn->close();
 <body>
 
   <div class="container mt-4">
-    <h3 class="text-center">Thêm Loại Tài Sản</h3>
+    <h3 class="text-center">Thêm Phân Loại Tài Sản</h3>
     <div class="card p-3 mt-3">
       <div class="card-body">
         <form id="assetTypeForm" action="them/themloaitaisan.php" method="POST">
@@ -90,7 +90,7 @@ $conn->close();
           </div>
 
           <div class="mb-3">
-            <label for="assetName" class="form-label">Tên Loại Tài Sản</label>
+            <label for="assetName" class="form-label">Tên Phân Loại Tài Sản</label>
             <input type="text" name="ten" class="form-control" id="assetName" placeholder="Nhập tên loại mục tài sản" required>
           </div>
 

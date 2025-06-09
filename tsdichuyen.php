@@ -183,7 +183,7 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản </option>
+                  <option value="">Phân Loại Tài Sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
@@ -237,12 +237,13 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>LOẠI TÀI SẢN</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>
                     <th>THÔNG TIN TÀI SẢN</th>
                     <th>Đơn vị </th>
+                    <th>Đơn vị cũ</th>
                     <th>TÁC VỤ</th>
                   </tr>
                 </thead>
@@ -299,7 +300,7 @@ $kq = $conn->query($sql);
                       echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
                       echo "<td>" . $row["product_information"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
-
+                      echo "<td>" . $row["old_unit"] . "</td>";
                       echo "<td> 
                         <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
                             <i class='bi bi-eye'></i>

@@ -128,7 +128,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="card mt-4">
           <div class="card-body">
-            <h2 class="card-title mb-4">Các loại tài sản hiện có </h2>
+            <h2 class="card-title mb-4">Các phân loại tài sản hiện có </h2>
             <div class="d-flex flex-wrap gap-3">
               <?php
               $cate = "select * from `category_product`";

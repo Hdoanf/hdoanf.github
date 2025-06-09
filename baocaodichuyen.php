@@ -58,7 +58,7 @@ echo "<table border='1'>";
 echo "<tr>
         <th>STT</th>
         <th>NHÓM TÀI SẢN</th>
-        <th>LOẠI TÀI SẢN</th>
+        <th>PHÂN LOẠI TÀI SẢN	</th>
         <th>TÊN TÀI SẢN</th>
         <th>BARCODE</th>
         <th>NĂM NHẬP</th>

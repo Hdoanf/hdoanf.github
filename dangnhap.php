@@ -17,9 +17,8 @@ if (isset($_POST["usn"]) && isset($_POST["pass"])) {
     $user = $result->fetch_assoc();
     session_start();
     $_SESSION['user'] = $user['username'];
-    $_SESSION['quyenhan'] = $user['use_role']; // admin hoặc user
     $_SESSION['donvi'] = $user['units'];      // ví dụ: CNT
-
+    $_SESSION['quyenhan'] = $user['use_role'];
     if ($user['use_role'] === "user") {
       header("Location: nguoidung.php");
     } else {

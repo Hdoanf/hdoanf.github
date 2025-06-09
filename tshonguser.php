@@ -30,7 +30,7 @@ $loaits = "";
 $tinh_trang = "";
 $donvi = $_SESSION['donvi'];
 
-$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' AND units ='$donvi' ";
+$sql = "SELECT * FROM `full_information` WHERE (`product_status` = 'maintenance' or `product_status` = 'inactive') AND units ='$donvi' ";
 if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
   $search = isset($_GET['search']) ? trim($_GET['search']) : '';
   $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
@@ -162,7 +162,7 @@ $kq = $conn->query($sql);
               </div>
               <div class="col-md-3">
                 <select name="loaitaisan" class='form-select'>
-                  <option value="">Loại Tài sản </option>
+                  <option value="">Phân Loại Tài Sản </option>
                   <?php
                   $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
                   if ($loai->num_rows > 0) {
@@ -216,7 +216,7 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>LOẠI TÀI SẢN</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>

@@ -65,7 +65,7 @@ if ($result->num_rows > 0) {
         ?>
       </tr>
       <tr>
-        <th>Loại Tài Sản</th>
+        <th>Phân Loại Tài Sản</th>
         <?php $kqcategory = $conn->query("SELECT * FROM category_product WHERE id_category = " . $row["product_category"] . "");
         if ($kqcategory->num_rows > 0) {
           $rowcategory = $kqcategory->fetch_assoc();
@@ -74,7 +74,7 @@ if ($result->num_rows > 0) {
         echo "<td>" . $category . "</td>"; ?>
       </tr>
       <tr>
-        <th>Tình Trạng</th>
+        <th>Tên Tài Sản</th>
         <?php $ten = strtoupper($row["product_name"]);
         $kqname = $conn->query("SELECT * FROM `product` WHERE `id_product`='$ten'");
         if ($kqname->num_rows > 0) {
@@ -109,7 +109,7 @@ if ($result->num_rows > 0) {
         </td>
       <tr>
       <tr>
-        <th>Phòng cũ</th>
+        <th>Đơn vị cũ</th>
         <td>
           <?php
           //echo 
