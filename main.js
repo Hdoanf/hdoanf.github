@@ -66,20 +66,20 @@ document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
   }
 });
 
-//them
-function themtaisan() {
-  var myModal = new bootstrap.Modal(document.getElementById('modalThem'));
-  myModal.show();
-  fetch(`them.php`)
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("modalbodythem").innerHTML = data;
-    })
-    .catch(error => {
-      console.log(error)
-      document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
-    });
-}
+////them
+//function themtaisan() {
+//  var myModal = new bootstrap.Modal(document.getElementById('modalThem'));
+//  myModal.show();
+//  fetch(`them.php`)
+//    .then(response => response.text())
+//    .then(data => {
+//      document.getElementById("modalbodythem").innerHTML = data;
+//    })
+//    .catch(error => {
+//      console.log(error)
+//      document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
+//    });
+//}
 
 function thongbao(id) {
   var myModal = new bootstrap.Modal(document.getElementById('modalthongbao'));

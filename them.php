@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,20 +12,16 @@ if ($conn->connect_error) {
 }
 
 $conn->set_charset('utf8mb4');
+
+// Các truy vấn SQL
 $category_product = "SELECT * FROM category_product";
 $group_product = "SELECT * FROM group_product";
 $product = "SELECT * FROM product";
 $status_product = "SELECT * FROM status_product";
-$units = "SELECT * FROM units
-ORDER BY
-    CASE
-        WHEN units = 'Chưa phân lớp' THEN 0
-        ELSE 1
-    END,
-    units;
-";
+$units = "SELECT * FROM units ORDER BY CASE WHEN units = 'Chưa phân lớp' THEN 0 ELSE 1 END, units";
 $year_import = "SELECT * FROM year_import";
 
+// Thực thi truy vấn
 $kqcate = $conn->query($category_product);
 $kqgroup = $conn->query($group_product);
 $kqproduct = $conn->query($product);
@@ -31,61 +29,61 @@ $kqstatus = $conn->query($status_product);
 $kqunits = $conn->query($units);
 $kqyear = $conn->query($year_import);
 
+// Xử lý khi submit form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $loaits = $_POST['product_category'];
-  $taisan = $_POST['product'];
-  $nhomts = $_POST['product_group'];
-  $trangthai = $_POST['product_status'];
-  $donvi = $_POST['units'];
-  $nam = $_POST['year_import'];
-  $baohanh = $_POST['thoihan_baohanh'];
-  $info = $_POST['thongtin'];
+  // Kiểm tra nếu là AJAX request
+  $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 
-  //lay item lớn nhất trong nhóm có 4 cột đầu tiên giống nhau
+  $loaits = $conn->real_escape_string($_POST['product_category']);
+  $taisan = $conn->real_escape_string($_POST['product']);
+  $nhomts = $conn->real_escape_string($_POST['product_group']);
+  $trangthai = $conn->real_escape_string($_POST['product_status']);
+  $donvi = $conn->real_escape_string($_POST['units']);
+  $nam = $conn->real_escape_string($_POST['year_import']);
+  $baohanh = $conn->real_escape_string($_POST['thoihan_baohanh']);
+  $info = $conn->real_escape_string($_POST['thongtin']);
+
+  // Tìm item lớn nhất
   $sqlMaxItem = "SELECT MAX(item) AS max_item FROM full_information 
-                   WHERE product_category = '$loaits' 
-                   AND product_name = '$taisan' 
-                   AND product_group = '$nhomts' 
-                   AND year_import = '$nam'";
+                 WHERE product_category = '$loaits' 
+                 AND product_name = '$taisan' 
+                 AND product_group = '$nhomts' 
+                 AND year_import = '$nam'";
 
   $result = $conn->query($sqlMaxItem);
   $maxItem = 0;
 
-  if ($result->num_rows > 0) {
+  if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $maxItem = intval($row["max_item"]);
   }
-  // them000 vao truoc truc so
+
   $newItem = str_pad($maxItem + 1, 4, "0", STR_PAD_LEFT);
-
   $barcode = $nhomts . $loaits . $taisan . $nam . $newItem;
-  echo "<script>console.log('$barcode')</script>";
-  echo "<script>console.log('$newItem')</script>";
-  echo "<script>console.log('$nam')</script>";
-  echo "<script>console.log('$loaits')</script>";
-  echo "<script>console.log('$taisan')</script>";
-  echo "<script>console.log('$baohanh')</script>";
-  echo "<script>console.log('$trangthai')</script>";
-  echo "<script>console.log('$donvi')</script>";
-  echo "<script>console.log('$nhomts')</script>";
 
+  // Thêm vào CSDL
   $sqlInsert = "INSERT INTO `full_information`
-  (`product_group`, `product_category`, `product_name`, `year_import`, `item`,
-  `barcode`,`product_information`,`Warranty_Period`, `product_status`, `units`, `note`)
-  VALUES ('$nhomts','$loaits','$taisan','$nam','$newItem','$barcode','$info','$baohanh','$trangthai','$donvi','')";
+                (`product_group`, `product_category`, `product_name`, `year_import`, `item`,
+                `barcode`,`product_information`,`Warranty_Period`, `product_status`, `units`, `note`)
+                VALUES ('$nhomts','$loaits','$taisan','$nam','$newItem',
+                '$barcode','$info','$baohanh','$trangthai','$donvi','')";
+
   $kqInsert = $conn->query($sqlInsert);
 
-  session_start();
-  if ($kqInsert) {
-    $_SESSION['thanhcong'] = "Thêm tài sản thành công";
-  } else {
-    $_SESSION['loi'] = "Lỗi khi thêm tài sản";
+  if ($isAjax) {
+    // Trả về JSON nếu là AJAX request
+    header('Content-Type: application/json');
+    if ($kqInsert) {
+      echo json_encode(['success' => true, 'message' => 'Thêm tài sản thành công']);
+    } else {
+      echo json_encode(['success' => false, 'message' => 'Lỗi khi thêm tài sản: ' . $conn->error]);
+    }
+    exit();
   }
-  header("Location: admin.php");
-  exit();
 }
-?>
 
+// Phần hiển thị form giữ nguyên như trước
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -107,39 +105,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
               <div class="mb-3">
                 <label class="form-label">Nhóm tài sản</label>
-                <select class="form-select" name="product_group">
-                  <?php foreach ($kqgroup as $gr) {
-                    echo "<option value='{$gr["id_group"]}'>" . $gr["name_group"] . "</option>";
-                  } ?>
+                <select class="form-select" name="product_group" id="product_group" required>
+                  <option value="">-- Chọn nhóm tài sản --</option>
+                  <?php foreach ($kqgroup as $gr): ?>
+                    <option value="<?= $gr['id_group'] ?>"><?= $gr['name_group'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
+
               <div class="mb-3">
-                <label class="form-label">Danh mục tài sản</label>
-                <select class="form-select" name="product">
-                  <?php foreach ($kqproduct as $pro) {
-                    echo "<option value='{$pro["id_product"]}'>" . $pro["name_product"] . "</option>";
-                  } ?>
+                <label class="form-label">Loại tài sản</label>
+                <select class="form-select" name="product_category" id="product_category" required disabled>
+                  <option value="">-- Chọn loại tài sản --</option>
+                  <?php foreach ($kqcate as $cate): ?>
+                    <option value="<?= $cate['id_category'] ?>"
+                      data-group="<?= $cate['group_id'] ?? '0' ?>">
+                      <?= $cate['name_category'] ?>
+                    </option>
+                  <?php endforeach; ?>
                 </select>
               </div>
+
               <div class="mb-3">
-                <label class="form-label">Phân loại tài sản</label>
-                <select class="form-select" name="product_category">
-                  <?php foreach ($kqcate as $cate) {
-                    echo "<option value='{$cate["id_category"]}'>" . $cate["name_category"] . "</option>";
-                  } ?>
+                <label class="form-label">Tên tài sản</label>
+                <select class="form-select" name="product" id="product" required disabled>
+                  <option value="">-- Chọn tài sản --</option>
+                  <?php foreach ($kqproduct as $pro): ?>
+                    <option value="<?= $pro['id_product'] ?>"
+                      data-category="<?= $pro['category_id'] ?? '0' ?>">
+                      <?= $pro['name_product'] ?>
+                    </option>
+                  <?php endforeach; ?>
                 </select>
               </div>
+
               <div class="mb-3">
                 <label class="form-label">Đơn vị sở hữu</label>
                 <select class="form-select" name="units">
-                  <?php foreach ($kqunits as $unt) {
-                    echo "<option value='{$unt["id_units"]}'>" . $unt["units"] . "</option>";
-                  } ?>
+                  <?php foreach ($kqunits as $unt): ?>
+                    <option value="<?= $unt['id_units'] ?>"><?= $unt['units'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-md-6">
           <div class="card h-100">
             <div class="card-header bg-success text-white">Thông tin bổ sung</div>
@@ -147,17 +158,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               <div class="mb-3">
                 <label class="form-label">Trạng thái sản phẩm</label>
                 <select class="form-select" name="product_status">
-                  <?php foreach ($kqstatus as $sta) {
-                    echo "<option value='{$sta["status_product"]}'>" . $sta["status_product"] . "</option>";
-                  } ?>
+                  <?php foreach ($kqstatus as $sta): ?>
+                    <option value="<?= $sta['status_product'] ?>"><?= $sta['status_product'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="mb-3">
                 <label class="form-label">Năm nhập</label>
                 <select class="form-select" name="year_import">
-                  <?php foreach ($kqyear as $year) {
-                    echo "<option value='{$year["id_year"]}'>" . $year["year_import"] . "</option>";
-                  } ?>
+                  <?php foreach ($kqyear as $year): ?>
+                    <option value="<?= $year['id_year'] ?>"><?= $year['year_import'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="mb-3">
@@ -165,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input required type="date" class="form-control" name="thoihan_baohanh">
               </div>
               <div class="mb-3">
-                <label class="form-label">Thông tin tài sản</label>
+                <label class="form-label">Thông tin sản phẩm</label>
                 <textarea class="form-control" name="thongtin"></textarea>
               </div>
             </div>
@@ -179,8 +190,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
   </div>
 
-</body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const groupSelect = document.getElementById('product_group');
+      const categorySelect = document.getElementById('product_category');
+      const productSelect = document.getElementById('product');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      // Lưu các option thực tế (bỏ qua option mặc định đầu tiên)
+      const allCategories = Array.from(categorySelect.querySelectorAll('option:not([value=""])'));
+      const allProducts = Array.from(productSelect.querySelectorAll('option:not([value=""])'));
+
+      // Xử lý khi chọn nhóm tài sản
+      groupSelect.addEventListener('change', function() {
+        const selectedGroup = this.value;
+
+        // Reset các select phía sau
+        categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>'; // Chỉ thêm 1 lần
+        productSelect.innerHTML = '<option value="">-- Chọn tài sản --</option>';
+        productSelect.disabled = true;
+
+        if (selectedGroup) {
+          // Lọc danh mục theo nhóm được chọn
+          allCategories.forEach(option => {
+            if (option.dataset.group === selectedGroup) {
+              categorySelect.appendChild(option.cloneNode(true));
+            }
+          });
+
+          categorySelect.disabled = false;
+        } else {
+          categorySelect.disabled = true;
+        }
+      });
+
+      // Xử lý khi chọn loại tài sản
+      categorySelect.addEventListener('change', function() {
+        const selectedCategory = this.value;
+
+        // Reset select sản phẩm
+        productSelect.innerHTML = '<option value="">-- Chọn tài sản --</option>';
+
+        if (selectedCategory) {
+          // Lọc sản phẩm theo danh mục được chọn
+          allProducts.forEach(option => {
+            if (option.dataset.category === selectedCategory) {
+              productSelect.appendChild(option.cloneNode(true));
+            }
+          });
+
+          productSelect.disabled = false;
+        } else {
+          productSelect.disabled = true;
+        }
+      });
+    });
+  </script>
+</body>
 
 </html>

@@ -237,7 +237,9 @@ $kq = $conn->query($sql);
                 <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-primary w-100" onclick="themtaisan()">Thêm</button>
+                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addAssetModal">
+                  Thêm tài sản mới
+                </button>
               </div>
               <div class="col-md-2">
                 <button class="btn btn-primary w-100" onclick="quetma()">Quét Mã Vạch</button>
@@ -405,24 +407,24 @@ $kq = $conn->query($sql);
   </div>
 
   <!--modal themtaisanmoi --->
-  <div class="modal fade  modalcao" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
+  <div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
+          <h5 class="modal-title" id="addAssetModalLabel">Thêm tài sản mới</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="modalbodythem">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
+        <div class="modal-body">
+          <!-- Nội dung form sẽ được tải từ them.php -->
+          <div id="formContainer"></div>
+        </div>
+        <div class="modal-footer">
         </div>
       </div>
     </div>
   </div>
+
+
   <!-- toast template -->
   <div class="position-fixed bottom-0 end-0 p-3  modalcao" style="z-index: 11">
     <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -456,6 +458,136 @@ $kq = $conn->query($sql);
   </div>
 
   <script src="main.js"></script>
+  <script>
+    // Khi modal được mở, tải nội dung form từ them.php
+    document.getElementById('addAssetModal').addEventListener('show.bs.modal', function() {
+      fetch('them.php')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('formContainer').innerHTML = html;
+          initFormScripts();
+
+          // Thêm sự kiện submit form
+          const form = document.querySelector('#formContainer form');
+          if (form) {
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+
+              fetch('them.php', {
+                  method: 'POST',
+                  body: new FormData(this),
+                  headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Đánh dấu là AJAX request
+                  }
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    // Hiển thị toast thông báo
+                    var toast = document.getElementById('toast');
+                    var toastBody = document.getElementById('toastbd');
+                    toastBody.innerHTML = data.message;
+                    toast.classList.remove('text-bg-danger');
+                    toast.classList.add('text-bg-success');
+                    var toastInstance = new bootstrap.Toast(toast);
+                    toastInstance.show();
+
+                    // Đóng modal
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addAssetModal'));
+                    modal.hide();
+
+                    // Làm mới trang sau 1.5 giây
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 1500);
+                  } else {
+                    // Hiển thị thông báo lỗi
+                    var toast = document.getElementById('toast');
+                    var toastBody = document.getElementById('toastbd');
+                    toastBody.innerHTML = data.message;
+                    toast.classList.remove('text-bg-success');
+                    toast.classList.add('text-bg-danger');
+                    var toastInstance = new bootstrap.Toast(toast);
+                    toastInstance.show();
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  var toast = document.getElementById('toast');
+                  var toastBody = document.getElementById('toastbd');
+                  toastBody.innerHTML = 'Có lỗi xảy ra khi gửi dữ liệu';
+                  toast.classList.remove('text-bg-success');
+                  toast.classList.add('text-bg-danger');
+                  var toastInstance = new bootstrap.Toast(toast);
+                  toastInstance.show();
+                });
+            });
+          }
+        });
+    });
+
+    function initFormScripts() {
+      const groupSelect = document.getElementById('product_group');
+      const categorySelect = document.getElementById('product_category');
+      const productSelect = document.getElementById('product');
+
+      if (groupSelect && categorySelect && productSelect) {
+        // Lưu tất cả các option gốc (loại bỏ option đầu tiên nếu nó là placeholder)
+        const allCategories = Array.from(categorySelect.querySelectorAll('option')).slice(1);
+        const allProducts = Array.from(productSelect.querySelectorAll('option')).slice(1);
+
+        // Xử lý khi chọn nhóm tài sản
+        groupSelect.addEventListener('change', function() {
+          const selectedGroup = this.value;
+
+          // Reset các select phía sau
+          categorySelect.value = '';
+          productSelect.value = '';
+          productSelect.disabled = true;
+
+          if (selectedGroup) {
+            // Giữ lại option mặc định đầu tiên
+            categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>';
+
+            allCategories.forEach(option => {
+              if (option.dataset.group === selectedGroup) {
+                categorySelect.appendChild(option.cloneNode(true));
+              }
+            });
+
+            categorySelect.disabled = false;
+          } else {
+            categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>';
+            categorySelect.disabled = true;
+          }
+        });
+
+        // Xử lý khi chọn loại tài sản
+        categorySelect.addEventListener('change', function() {
+          const selectedCategory = this.value;
+
+          // Reset select sản phẩm
+          productSelect.value = '';
+
+          if (selectedCategory) {
+            // Giữ lại option mặc định đầu tiên
+            productSelect.innerHTML = '<option value="">-- Chọn tài sản --</option>';
+
+            allProducts.forEach(option => {
+              if (option.dataset.category === selectedCategory) {
+                productSelect.appendChild(option.cloneNode(true));
+              }
+            });
+
+            productSelect.disabled = false;
+          } else {
+            productSelect.innerHTML = '<option value="">-- Chọn tài sản --</option>';
+            productSelect.disabled = true;
+          }
+        });
+      }
+    }
+  </script>
 
 
 </body>
