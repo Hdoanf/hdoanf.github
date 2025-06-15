@@ -12,14 +12,17 @@ if ($conn->connect_error) {
 
 $id = '';
 $name = '';
-
+$conn->set_charset('utf8mb4');
+$sql = "SELECT * FROM `group_product`";
+$kqgr = $conn->query($sql);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $id = isset($_POST['id']) ? trim($_POST['id']) : '';
   $name = isset($_POST['ten']) ? trim($_POST['ten']) : '';
+  $gr = isset($_POST['group']) ? trim($_POST['group']) : '';
   session_start();
   if (!empty($id) && !empty($name)) {
-    $stmt = $conn->prepare("INSERT INTO `category_product`(`id_category`, `name_category`) VALUES (?, ?)");
-    $stmt->bind_param("ss", $id, $name);
+    $stmt = $conn->prepare("INSERT INTO `category_product`(`id_category`, `name_category`,`group_id`) VALUES (?,?, ?)");
+    $stmt->bind_param("sss", $id, $name, $gr);
     $kq = $stmt->execute();
 
     if ($kq) {
@@ -92,6 +95,16 @@ $conn->close();
           <div class="mb-3">
             <label for="assetName" class="form-label">Tên Phân Loại Tài Sản</label>
             <input type="text" name="ten" class="form-control" id="assetName" placeholder="Nhập tên loại mục tài sản" required>
+          </div>
+
+          <div class="mt-3 mb-3">
+            <label class="form-label">Thuộc Nhóm loại</label>
+            <select class="form-select" name="group" id="" required>
+              <option value="">-- Chọn nhóm tài sản --</option>
+              <?php foreach ($kqgr as $gr): ?>
+                <option value="<?= $gr['id_group'] ?>"><?= $gr['name_group'] ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
 
           <button type="submit" class="btn btn-save">Thêm</button>

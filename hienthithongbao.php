@@ -249,12 +249,12 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>PHÂN LOẠI TÀI SẢN	</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
-                    <th>SỬ LÝ</th>
+                    <th>XỬ LÝ</th>
                     <th>TRẠNG THÁI</th>
                     <th>THÔNG TIN TÀI SẢN THÔNG BÁO</th>
-                    <th>NGAY THÔNG BÁO</th>
+                    <th>NGÀY THÔNG BÁO</th>
                     <th>TÁC VỤ</th>
                   </tr>
                 </thead>
@@ -297,7 +297,7 @@ $kq = $conn->query($sql);
                         $name = $rowname["name_product"];
                       }
                       echo "<td>" . $name . "</td>";
-                      if ($row['xacnhan'] == "Chưa sử lý") {
+                      if ($row['xacnhan'] == "Chưa Xử Lý") {
                         $textcolor = 'text-danger';
                       } else {
                         $textcolor = "text-success";

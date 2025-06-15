@@ -6,66 +6,212 @@ if ($_SESSION['admin'] !== 'admin') {
   exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-  echo "hình như chưa kết nối được ";
-}
-
+// Kết nối database
+$conn = new mysqli("localhost", "root", "", "barcode");
+if ($conn->connect_error) die("Kết nối thất bại: " . $conn->connect_error);
 $conn->set_charset('utf8mb4');
-session_start();
-$toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
-$toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
-echo "<script>console.log('$toastthanhcong')</script>";
-unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 
+// Lấy dữ liệu thống kê
+$sql = "SELECT 
+            yi.year_import as year,
+            p.name_product as product_name,
+            COUNT(fi.barcode) as total_assets,
+            SUM(CASE WHEN fi.product_status IN ('maintenance', 'inactive') THEN 1 ELSE 0 END) as broken_assets
+        FROM full_information fi
+        LEFT JOIN year_import yi ON fi.year_import = yi.id_year
+        LEFT JOIN product p ON fi.product_name = p.id_product
+        GROUP BY yi.year_import, p.name_product
+        ORDER BY yi.year_import, total_assets DESC";
 
-$search = "";
-$loaits = "";
-$tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE `product_status` = 'maintenance' or `product_status` = 'inactive'";
-if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
-  $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-  $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
-  $tinh_trang = isset($_GET['tinhtrang']) ? trim($_GET['tinhtrang']) : '';
-  // lấy id của bảng product
-  if (!empty($search)) {
-    $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
-    if ($tts->num_rows > 0) {
-      $tts2 = $tts->fetch_assoc();
-      $tentk = $tts2["id_product"]; //lấy id của bảng product ứng với tên là biển seach
-      echo "<script>console.log('$tentk')</script>";
-      $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
-    } else {
-      $sql = "SELECT * FROM `full_information` WHERE 0";
-    }
+$result = $conn->query($sql);
+
+// Tổ chức dữ liệu theo năm
+$yearlyData = [];
+while ($row = $result->fetch_assoc()) {
+  $year = $row['year'];
+  if (!isset($yearlyData[$year])) {
+    $yearlyData[$year] = [
+      'total' => 0,
+      'broken' => 0,
+      'products' => []
+    ];
   }
-  if (!empty($loaits)) {
-    $sql .= " AND `product_category` = '$loaits'"; //nối
-  }
-  if (!empty($tinh_trang)) {
-    $sql .= " AND `product_status` = '$tinh_trang'";
-  }
+
+  $yearlyData[$year]['total'] += $row['total_assets'];
+  $yearlyData[$year]['broken'] += $row['broken_assets'];
+  $yearlyData[$year]['products'][] = [
+    'name' => $row['product_name'],
+    'total' => $row['total_assets'],
+    'broken' => $row['broken_assets']
+  ];
 }
-$kq = $conn->query($sql);
+
+// Kiểm tra nếu có yêu cầu xuất Excel
+if (isset($_GET['export'])) {
+  header("Content-Type: application/vnd.ms-excel");
+  header("Content-Disposition: attachment; filename=bao_cao_taisan.xls");
+
+  echo '<html xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid black; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .chart-container { margin-top: 30px; }
+            .year-section { margin-bottom: 30px; page-break-inside: avoid; }
+            h2 { color: #1a5276; }
+        </style>
+    </head>
+    <body>';
+
+  foreach ($yearlyData as $year => $data) {
+    echo '<div class="year-section">
+                <h2>Năm: ' . $year . '</h2>
+                <p><strong>Tổng tài sản:</strong> ' . $data['total'] . '</p>
+                <p><strong>Tài sản hỏng:</strong> ' . $data['broken'] . '</p>
+                
+                <table>
+                    <tr>
+                        <th>Tên tài sản</th>
+                        <th>Số lượng</th>
+                        <th>Số lượng hỏng</th>
+                    </tr>';
+
+    foreach ($data['products'] as $product) {
+      echo '<tr>
+                    <td>' . $product['name'] . '</td>
+                    <td>' . $product['total'] . '</td>
+                    <td>' . $product['broken'] . '</td>
+                  </tr>';
+    }
+
+    echo '</table></div>';
+  }
+
+  echo '</body></html>';
+  exit;
+}
+
+$conn->close();
 ?>
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý tài sản </title>
+  <title>Báo cáo tài sản theo năm</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    .modalcao {
+      z-index: 1060 !important;
 
+    }
+
+    .modal-backdropcao {
+      z-index: 1050 !important;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .year-section {
+      margin-bottom: 40px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    h2 {
+      color: #1a5276;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 5px;
+    }
+
+    .stats {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      flex: 1;
+      padding: 15px;
+      margin: 0 10px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-box h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .chart-container {
+      height: 400px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    .export-btn {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      padding: 12px;
+      background: #2ecc71;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .export-btn:hover {
+      background: #27ae60;
+    }
+  </style>
 </head>
+
+
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -172,59 +318,7 @@ $kq = $conn->query($sql);
         <div class="card mt-3">
           <div class="card-body">
             <h2 class="card-title mb-4">Báo cáo hỏng</h2>
-            <form class="row g-3 mb-4" method="GET">
-              <div class="col-md-4">
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-search"></i></span>
-                  <input name="search" type="text" class="form-control " placeholder="Tìm kiếm..."
-                    value="<?php echo htmlspecialchars($search) ?>">
-
-                </div>
-              </div>
-              <div class="col-md-3">
-                <select name="loaitaisan" class='form-select'>
-                  <option value="">Phân Loại Tài Sản </option>
-                  <?php
-                  $loai = $conn->query("SELECT DISTINCT product_category FROM full_information");
-                  if ($loai->num_rows > 0) {
-                    while ($rowloai = $loai->fetch_assoc()) {
-                      $kqloai = $conn->query(
-                        "SELECT * FROM `category_product`
-                                        WHERE `id_category`=" . $rowloai['product_category'] . ""
-                      );
-                      $rownameloai = $kqloai->fetch_assoc();
-                      $select = ($rowloai['product_category'] == $loaits) ? "selected" : "";
-                      // echo "<script>console.log('$select')</script>";
-                      echo "<option value='" . $rowloai['product_category'] . "' $select >
-                                            " . $rownameloai['name_category'] . "</option>";
-                    }
-                  }
-                  ?>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <select name="tinhtrang" class="form-select">
-                  <option value="">Tình trạng</option>
-                  <?php
-                  $tinhtrang = $conn->query("SELECT DISTINCT `product_status` FROM full_information");
-                  if ($tinhtrang->num_rows > 0) {
-                    while ($rowtinhtrang = $tinhtrang->fetch_assoc()) {
-                      $select2 = ($rowtinhtrang['product_status'] == $tinh_trang) ? "selected" : "";
-                      echo "<option value='" . $rowtinhtrang['product_status'] . "' $select2 >
-                                            " . $rowtinhtrang['product_status'] . "</option>";
-                    }
-                  }
-                  ?>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-              </div>
-            </form>
             <div class="row g-2 mb-4">
-              <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
-              </div>
               <div class="col-md-2">
                 <a href="baocao.php" class="btn btn-info w-100">Xuất báo cáo</a>
               </div>
@@ -232,197 +326,140 @@ $kq = $conn->query($sql);
             </div>
             <!-- bảng render từ database -->
             <div class="table-responsive " style="overflow-y:scroll;height:65vh;">
-              <table class="table table-hover text-center table-scroll table-striped">
-                <thead class="table-light">
-                  <tr>
-                    <th>TT</th>
-                    <th>NHÓM TÀI SẢN</th>
-                    <th>PHÂN LOẠI TÀI SẢN </th>
-                    <th>TÊN TÀI SẢN</th>
-                    <th>NĂM NHẬP</th>
-                    <th>TRẠNG THÁI</th>
-                    <th>THÔNG TIN TÀI SẢN</th>
-                    <th>Đơn vị </th>
-                    <th>TÁC VỤ</th>
-                  </tr>
-                </thead>
+              <div>
+                <h1>BÁO CÁO TÀI SẢN THEO NĂM</h1>
 
-                <tbody>
-                  <?php
-                  $tt = 1;
-                  $status = '';
-                  $group = '';
-                  $category = '';
-                  $name = '';
+                <?php foreach ($yearlyData as $year => $data): ?>
+                  <div class="year-section">
+                    <h2>Năm: <?= $year ?></h2>
 
-                  if ($kq->num_rows > 0) {
-                    while ($row = $kq->fetch_assoc()) {
-                      echo "<tr>";
-                      echo "<td>" . $tt . "</td>";
+                    <div class="stats">
+                      <div class="stat-box">
+                        <h3>Tổng tài sản</h3>
+                        <p><?= $data['total'] ?></p>
+                      </div>
+                      <div class="stat-box">
+                        <h3>Tài sản hỏng</h3>
+                        <p><?= $data['broken'] ?></p>
+                      </div>
+                    </div>
 
-                      //nhóm tài sản
-                      $kqgroup = $conn->query("SELECT * FROM group_product WHERE id_group = " . $row["product_group"] . "");
-                      if ($kqgroup->num_rows > 0) {
-                        $rowgroup = $kqgroup->fetch_assoc();
-                        $group = $rowgroup["name_group"];
-                      }
-                      echo "<td>" . $group . "</td>";
+                    <div class="chart-container">
+                      <canvas id="chart-<?= $year ?>"></canvas>
+                    </div>
 
+                    <h3>Chi tiết tài sản</h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tên tài sản</th>
+                          <th>Số lượng</th>
+                          <th>Số lượng hỏng</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($data['products'] as $product): ?>
+                          <tr>
+                            <td><?= $product['name'] ?></td>
+                            <td><?= $product['total'] ?></td>
+                            <td><?= $product['broken'] ?></td>
+                          </tr>
+                        <?php endforeach; ?>
+                      </tbody>
+                    </table>
+                  </div>
 
-                      //loại tài sản
-                      $kqcategory = $conn->query("SELECT * FROM category_product WHERE id_category = " . $row["product_category"] . "");
-                      if ($kqcategory->num_rows > 0) {
-                        $rowcategory = $kqcategory->fetch_assoc();
-                        $category = $rowcategory["name_category"];
-                      }
-                      echo "<td>" . $category . "</td>";
-                      //tên tài sản
-                      $ten = strtoupper($row["product_name"]);
-                      $kqname = $conn->query("SELECT * FROM `product` WHERE `id_product`='$ten'");
-                      if ($kqname->num_rows > 0) {
-                        $rowname = $kqname->fetch_assoc();
-                        $name = $rowname["name_product"];
-                      }
-                      echo "<td>" . $name . "</td>";
-                      //năm
-                      $nam = '';
-                      $strnam = $conn->real_escape_string($row["year_import"]);
-                      $sql = "SELECT * FROM `year_import` WHERE `id_year` LIKE '$strnam'";
-                      $kqnam = $conn->query($sql);
-                      if ($kqnam && $kqnam->num_rows > 0) {
-                        $rownam = $kqnam->fetch_assoc();
-                        $nam = $rownam['year_import'];
-                      }
+                  <script>
+                    // Đảm bảo DOM đã load trước khi tạo biểu đồ
+                    document.addEventListener('DOMContentLoaded', function() {
+                      // Tạo ID canvas an toàn
+                      const safeYear = '<?= preg_replace('/[^a-zA-Z0-9]/', '', $year) ?>';
+                      const canvasId = 'chart-' + safeYear;
 
-                      echo "<td>" . $nam . "</td>";
-                      $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
-                      echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>";
-                      echo "<td>" . $row["product_information"] . "</td>";
-                      echo "<td>" . $row["units"] . "</td>";
+                      // Lấy context canvas
+                      const ctx = document.getElementById(canvasId);
+                      if (!ctx) return;
 
-                      echo "<td> 
-                        <button class='btn btn-outline-info btn-sm' onclick='xemchitiet(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-eye'></i>
-                        </button>
-                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-pencil-square'></i>
-                        </button>
-                        <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["barcode"] . "\")'>
-                            <i class='bi bi-trash-fill'></i>
-                        </button>
-                      </td>";
+                      // Chuẩn bị dữ liệu
+                      const labels = [];
+                      const totalData = [];
+                      const brokenData = [];
 
-                      $tt++;
-                    }
-                  } else {
-                    echo "<tr><td colspan='9'>Không có dữ liệu</td></tr>";
-                  }
-                  ?>
-                </tbody>
-              </table>
+                      <?php foreach ($data['products'] as $product): ?>
+                        labels.push('<?= addslashes($product['name']) ?>');
+                        totalData.push(<?= $product['total'] ?>);
+                        brokenData.push(<?= $product['broken'] ?>);
+                      <?php endforeach; ?>
+
+                      // Tạo biểu đồ
+                      new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                          labels: labels,
+                          datasets: [{
+                              label: 'Tổng số lượng',
+                              data: totalData,
+                              backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                              borderColor: 'rgba(54, 162, 235, 1)',
+                              borderWidth: 1
+                            },
+                            {
+                              label: 'Số lượng hỏng',
+                              data: brokenData,
+                              backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                              borderColor: 'rgba(255, 99, 132, 1)',
+                              borderWidth: 1
+                            }
+                          ]
+                        },
+                        options: {
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              title: {
+                                display: true,
+                                text: 'Số lượng'
+                              },
+                              ticks: {
+                                stepSize: 1
+                              }
+                            },
+                            x: {
+                              title: {
+                                display: true,
+                                text: 'Tên tài sản'
+                              },
+                              ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
+                              }
+                            }
+                          },
+                          plugins: {
+                            legend: {
+                              position: 'top',
+                            },
+                            title: {
+                              display: true,
+                              text: 'Thống kê tài sản năm <?= $year ?>'
+                            }
+                          }
+                        }
+                      });
+                    });
+                  </script>
+                <?php endforeach; ?>
+              </div>
+
             </div>
           </div>
         </div>
-      </main>
     </div>
-  </div>
-  <!-- ing -->
-  <!-- <footer class="footer mt-auto py-3 bg-light"> -->
-  <!--   <div class="container text-center"> -->
-  <!--     <span class="text-muted">Phần mềm quản lý tài sản siêu vip </span> -->
-  <!--   </div> -->
-  <!-- </footer> -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- modal hien chitiet-->
-  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbody">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- modalXoa -->
-  <div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalXoaLabel">Xác nhận xóa</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h4>Bạn có chắc chắn muốn xóa không?</h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-          <button type="button" class="btn btn-danger" id="btnXacNhanXoa">Đồng ý</button>
-        </div>
-      </div>
-    </div>
   </div>
-  <!--modal suataisan --->
-  <div class="modal fade" id="modalSua" tabindex="-1" aria-labelledby="modalSua" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbodysua">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--modal themtaisanmoi --->
-  <div class="modal fade" id="modalThem" tabindex="-1" aria-labelledby="modalThem" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modalbodythem">
-          <!-- sau nay se duoc them vao bang js ben duoi -->
-          <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">dangload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- toast template -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="d-flex">
-        <div class="toast-body" id="toastbd">
-          <?php echo $toastthanhcong; ?>
-        </div>
-        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-    </div>
-  </div>
-
-  <script src="main.js"></script>
 </body>
 
 </html>

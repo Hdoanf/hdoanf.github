@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
   $qrupdate = $conn->query($update);
   session_start();
   if ($qrupdate) {
-    $_SESSION['thanhcong'] = "Sua tài sản thành công";
+    $_SESSION['thanhcong'] = "Sửa tài sản thành công";
   } else {
     $_SESSION['loi'] = "Lỗi khi thêm tài sản";
   }

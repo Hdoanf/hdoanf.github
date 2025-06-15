@@ -9,18 +9,20 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Kết nối thất bại: " . $conn->connect_error);
 }
+$conn->set_charset('utf8mb4');
+$sql = "SELECT * FROM `category_product`";
+$kqgr = $conn->query($sql);
 
 $id = '';
 $name = '';
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $id = isset($_POST['id']) ? trim($_POST['id']) : '';
   $name = isset($_POST['ten']) ? trim($_POST['ten']) : '';
-
+  $phanloai = isset($_POST) ? trim($_POST['group']) : '';
   if (!empty($id) && !empty($name)) {
     // Dùng prepared statement để tránh lỗi SQL Injection
-    $stmt = $conn->prepare("INSERT INTO `product`(`id_product`, `name_product`) VALUES (?, ?)");
-    $stmt->bind_param("ss", $id, $name);
+    $stmt = $conn->prepare("INSERT INTO `product`(`id_product`, `name_product`,`category_id`) VALUES (?, ?,?)");
+    $stmt->bind_param("sss", $id, $name, $phanloai);
     $kq = $stmt->execute();
     session_start();
     if ($kq) {
@@ -93,6 +95,16 @@ $conn->close();
           <div class="mb-3">
             <label for="assetName" class="form-label">Tên Danh Mục Tài Sản</label>
             <input type="text" name="ten" class="form-control" id="assetName" placeholder="Nhập tên danh mục tài sản" required>
+          </div>
+
+          <div class="mt-3 mb-3">
+            <label class="form-label">Thuộc Phân loại</label>
+            <select class="form-select" name="group" id="" required>
+              <option value="">-- Chọn phân loại tài sản --</option>
+              <?php foreach ($kqgr as $gr): ?>
+                <option value="<?= $gr['id_category'] ?>"><?= $gr['name_category'] ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
 
           <button type="submit" class="btn btn-save">Thêm</button>

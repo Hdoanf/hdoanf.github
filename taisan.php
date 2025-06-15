@@ -128,6 +128,45 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="card mt-4">
           <div class="card-body">
+            <h2 class="card-title mb-4">Nhóm tài sản hiên có</h2>
+            <div class="d-flex flex-wrap gap-3">
+              <?php
+              $group = "select * from `group_product` ";
+              $kqgroup = $conn->query($group);
+              if ($kqgroup->num_rows > 0) {
+                while ($rowgroup = $kqgroup->fetch_assoc()) {
+                  $group_product = $conn->real_escape_string($rowgroup['id_group']);
+                  $disbtngr = "SELECT * FROM `full_information` WHERE `product_group` ='$group_product' ";
+                  $qry = $conn->query($disbtngr);
+                  $disable = ($qry->num_rows) ? "disabled" : "";
+                  echo "<div class='card' style='width: 12rem;'>";
+                  echo "<div class='card-body'>";
+                  echo "<ul class='list-group list-group-flush'>";
+                  echo "<li class='list-group-item'>ID: " . htmlspecialchars($rowgroup["id_group"]) . "</li>";
+                  echo "<li class='list-group-item'>Name: " . htmlspecialchars($rowgroup["name_group"]) . "</li>";
+                  echo "</ul>";
+                  echo "</div>";
+                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowgroup["id_group"] . "\")'$disable>
+                      <i class='bi bi-trash-fill'></i>
+                        </button>";
+                  echo "</div>";
+                }
+              } else {
+                echo "<p>không có loại tài sản nào!</p>";
+              }
+              ?>
+
+            </div>
+          </div>
+          <div>
+            <button class=" m-3 btn btn-primary" onclick="themtaisanmoi(2)">
+              Thêm
+            </button>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
             <h2 class="card-title mb-4">Các phân loại tài sản hiện có </h2>
             <div class="d-flex flex-wrap gap-3">
               <?php
@@ -166,44 +205,6 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
           </div>
         </div>
 
-        <div class="card mt-4">
-          <div class="card-body">
-            <h2 class="card-title mb-4">Nhóm tài sản hiên có</h2>
-            <div class="d-flex flex-wrap gap-3">
-              <?php
-              $group = "select * from `group_product` ";
-              $kqgroup = $conn->query($group);
-              if ($kqgroup->num_rows > 0) {
-                while ($rowgroup = $kqgroup->fetch_assoc()) {
-                  $group_product = $conn->real_escape_string($rowgroup['id_group']);
-                  $disbtngr = "SELECT * FROM `full_information` WHERE `product_group` ='$group_product' ";
-                  $qry = $conn->query($disbtngr);
-                  $disable = ($qry->num_rows) ? "disabled" : "";
-                  echo "<div class='card' style='width: 12rem;'>";
-                  echo "<div class='card-body'>";
-                  echo "<ul class='list-group list-group-flush'>";
-                  echo "<li class='list-group-item'>ID: " . htmlspecialchars($rowgroup["id_group"]) . "</li>";
-                  echo "<li class='list-group-item'>Name: " . htmlspecialchars($rowgroup["name_group"]) . "</li>";
-                  echo "</ul>";
-                  echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_group"] . "\")'$disable>
-                      <i class='bi bi-trash-fill'></i>
-                        </button>";
-                  echo "</div>";
-                }
-              } else {
-                echo "<p>Không có loại tài sản nào!</p>";
-              }
-              ?>
-
-            </div>
-          </div>
-          <div>
-            <button class=" m-3 btn btn-primary" onclick="themtaisanmoi(2)">
-              Thêm
-            </button>
-          </div>
-        </div>
 
         <div class=" card mt-4">
           <div class="card-body">

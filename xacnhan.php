@@ -14,7 +14,7 @@ $getid = $_GET['id'];
 $id = $conn->real_escape_string($getid);
 $sql = "UPDATE `full_information` SET `product_status`='maintenance' WHERE `barcode` LIKE '$id' ";
 $kq = $conn->query($sql);
-$sqlthongbao = "UPDATE `thongbao` SET `Xac_nhan`='Đã sử lý' WHERE `barcode` LIKE '$id'";
+$sqlthongbao = "UPDATE `thongbao` SET `Xac_nhan`='Đã Xử lý' WHERE `barcode` LIKE '$id'";
 $sqlthongbao = $conn->query($sqlthongbao);
 session_start();
 if ($kq) {
