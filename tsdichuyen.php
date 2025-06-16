@@ -171,7 +171,7 @@ $kq = $conn->query($sql);
         <!-- chỗ tìm kiếm -->
         <div class="card mt-3">
           <div class="card-body">
-            <h2 class="card-title mb-4">Quản lý tài sản </h2>
+            <h2 class="card-title mb-4">Báo cáo di chuyển </h2>
             <form class="row g-3 mb-4" method="GET">
               <div class="col-md-4">
                 <div class="input-group">
@@ -223,7 +223,7 @@ $kq = $conn->query($sql);
             </form>
             <div class="row g-2 mb-4">
               <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
+                <a href="admin.php" class="btn btn-danger w-100">Xóa tìm kiếm</a>
               </div>
               <div class="col-md-2">
                 <a href="baocaodichuyen.php" class="btn btn-info w-100">Xuất báo cáo</a>

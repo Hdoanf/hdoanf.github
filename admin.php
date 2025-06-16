@@ -234,7 +234,7 @@ $kq = $conn->query($sql);
             </form>
             <div class="row g-2 mb-4">
               <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
+                <a href="admin.php" class="btn btn-danger w-100">Xóa tìm kiếm</a>
               </div>
               <div class="col-md-2">
                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addAssetModal">
@@ -547,7 +547,7 @@ $kq = $conn->query($sql);
 
           if (selectedGroup) {
             // Giữ lại option mặc định đầu tiên
-            categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>';
+            categorySelect.innerHTML = '<option value="">-- Chọn nhóm loại tài sản --</option>';
 
             allCategories.forEach(option => {
               if (option.dataset.group === selectedGroup) {
@@ -557,7 +557,7 @@ $kq = $conn->query($sql);
 
             categorySelect.disabled = false;
           } else {
-            categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>';
+            categorySelect.innerHTML = '<option value="">-- Chọn phân loại tài sản --</option>';
             categorySelect.disabled = true;
           }
         });

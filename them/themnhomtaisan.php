@@ -12,11 +12,12 @@ if ($conn->connect_error) {
 
 $id = '';
 $name = '';
-
+$sql = "SELECT * FROM `group_product` ORDER BY `id_group` DESC LIMIT 1";
+$kq = $conn->query($sql);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+  $row = $kq->fetch_assoc();
+  $id = str_pad($row["id_group"] + 1, 2, "0", STR_PAD_LEFT);
   $name = isset($_POST['ten']) ? trim($_POST['ten']) : '';
-
   if (!empty($id) && !empty($name)) {
     $stmt = $conn->prepare("INSERT INTO `group_product`(`id_group`, `name_group`) VALUES (?, ?)");
     $stmt->bind_param("ss", $id, $name);
@@ -84,10 +85,10 @@ $conn->close();
     <div class="card p-3 mt-3">
       <div class="card-body">
         <form id="assetTypeForm" action="them/themnhomtaisan.php" method="POST">
-          <div class="mb-3">
-            <label for="assetId" class="form-label">ID</label>
-            <input type="number" name="id" class="form-control" id="assetId" placeholder="Nhập ID" required>
-          </div>
+          <!-- <div class="mb-3"> -->
+          <!--   <label for="assetId" class="form-label">ID</label> -->
+          <!--   <input type="number" name="id" class="form-control" id="assetId" placeholder="Nhập ID" required> -->
+          <!-- </div> -->
 
           <div class="mb-3">
             <label for="assetName" class="form-label">Tên Nhóm Tài Sản</label>

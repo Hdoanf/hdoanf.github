@@ -14,9 +14,12 @@ $id = '';
 $name = '';
 $conn->set_charset('utf8mb4');
 $sql = "SELECT * FROM `group_product`";
+$sqlidcate = "SELECT * FROM `category_product` ORDER BY `id_category` DESC LIMIT 1";
 $kqgr = $conn->query($sql);
+$kqidcate = $conn->query($sqlidcate);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+  $rowid = $kqidcate->fetch_assoc();
+  $id = $rowid['id_category'] + 1;
   $name = isset($_POST['ten']) ? trim($_POST['ten']) : '';
   $gr = isset($_POST['group']) ? trim($_POST['group']) : '';
   session_start();
@@ -87,10 +90,10 @@ $conn->close();
     <div class="card p-3 mt-3">
       <div class="card-body">
         <form id="assetTypeForm" action="them/themloaitaisan.php" method="POST">
-          <div class="mb-3">
-            <label for="assetId" class="form-label">ID</label>
-            <input type="text" name="id" class="form-control" id="assetId" placeholder="Nhập ID" required>
-          </div>
+          <!-- <div class="mb-3"> -->
+          <!--   <label for="assetId" class="form-label">ID</label> -->
+          <!--   <input type="text" name="id" class="form-control" id="assetId" placeholder="Nhập ID" required> -->
+          <!-- </div> -->
 
           <div class="mb-3">
             <label for="assetName" class="form-label">Tên Phân Loại Tài Sản</label>

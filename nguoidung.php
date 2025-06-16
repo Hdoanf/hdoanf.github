@@ -206,7 +206,7 @@ $kq = $conn->query($sql);
             </form>
             <div class="row g-2 mb-4">
               <div class="col-md-2">
-                <a href="admin.php" class="btn btn-danger w-100">Xóa</a>
+                <a href="admin.php" class="btn btn-danger w-100">Xóa tìm kiếm</a>
               </div>
               <div class="col-md-2">
                 <button class="btn btn-primary w-100" onclick="quetma()">Quét Mã Vạch</button>
@@ -219,7 +219,7 @@ $kq = $conn->query($sql);
                   <tr>
                     <th>TT</th>
                     <th>NHÓM TÀI SẢN</th>
-                    <th>PHÂN LOẠI TÀI SẢN	</th>
+                    <th>PHÂN LOẠI TÀI SẢN </th>
                     <th>TÊN TÀI SẢN</th>
                     <th>NĂM NHẬP</th>
                     <th>TRẠNG THÁI</th>

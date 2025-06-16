@@ -165,7 +165,7 @@ $kq = $conn->query($sql);
       <main class=" col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
         <body>
-          <div class="container mt-4">
+          <div class="container mt-4 mb-3">
             <div class="card">
               <div class="card-header">
                 <h5>Cài đặt Dark Mode</h5>
@@ -179,29 +179,87 @@ $kq = $conn->query($sql);
                 <p class="text-muted mt-2">Chế độ tối giúp giảm mỏi mắt khi sử dụng vào ban đêm.</p>
               </div>
             </div>
+
+            <!-- Hướng dẫn sử dụng phần mềm quản lý tài sản -->
+
+            <div class="huongdan">
+              <h2>🛠 HƯỚNG DẪN SỬ DỤNG MỘT SỐ CHỨC NĂNG CỦA PHẦN MỀM</h2>
+
+              <h3>📦 1. Thêm tài sản mới</h3>
+              <ol>
+                <li>Vào menu <strong>"Tài sản"</strong> → chọn <strong>"Thêm mới"</strong></li>
+                <li>Nhập đầy đủ thông tin tài sản</li>
+                <li>Nhấn nút <strong>"Lưu"</strong> để hoàn tất</li>
+              </ol>
+
+              <h3>🗃 2. Xem danh sách tài sản</h3>
+              <ol>
+                <li>Vào mục <strong>"Tài sản"</strong> từ thanh menu</li>
+                <li>Tìm kiếm theo mã, tên, hoặc lọc theo loại tài sản</li>
+                <li>Nhấn vào biểu tượng <strong>🔍</strong> để xem chi tiết</li>
+              </ol>
+
+              <h3>🖋 3. Sửa thông tin tài sản</h3>
+              <ol>
+                <li>Nhấn nút <strong>"Sửa"</strong> (biểu tượng ✏) tại tài sản cần chỉnh</li>
+                <li>Cập nhật thông tin và nhấn <strong>"Cập nhật"</strong></li>
+              </ol>
+
+              <h3>🗑 4. Xóa tài sản</h3>
+              <ol>
+                <li>Nhấn <strong>"Xóa"</strong> (biểu tượng 🗑) tại tài sản muốn xóa</li>
+                <li>Xác nhận khi hệ thống yêu cầu</li>
+              </ol>
+
+              <h3>📂 5. Quản lý loại tài sản</h3>
+              <ol>
+                <li>Vào menu <strong>"Loại tài sản"</strong> để thêm, sửa, xóa loại</li>
+                <li>Lưu ý: Chỉ xóa loại khi không còn tài sản nào đang sử dụng</li>
+              </ol>
+
+              <h3>🧑‍💼 6. Phân quyền người dùng</h3>
+              <ol>
+                <li>Chỉ admin có thể vào <strong>"Quản lý người dùng"</strong></li>
+                <li>Chỉnh sửa quyền người dùng và nhấn <strong>"Lưu"</strong></li>
+              </ol>
+
+              <h3>🔍 7. Tra cứu tài sản bằng mã vạch</h3>
+              <ol>
+                <li>Vào mục <strong>"Tra cứu"</strong></li>
+                <li>Dùng đầu đọc mã vạch quét tài sản</li>
+                <li>Hệ thống hiển thị thông tin tương ứng</li>
+              </ol>
+
+              <h3>📊 8. Xem báo cáo tài sản</h3>
+              <ol>
+                <li>Vào mục <strong>"Báo cáo"</strong> và chọn tiêu chí lọc</li>
+                <li>Nhấn <strong>"Xem báo cáo"</strong></li>
+                <li>Có thể xuất ra file Excel hoặc PDF</li>
+              </ol>
+            </div>
           </div>
 
           <!-- Bootstrap JS + Popper -->
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-          <!-- Font Awesome -->
-          <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+          <! echo '<div class="summary"> <br> </div>' ;-- Font Awesome -->
+            <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-          <script>
-            // Dark Mode đơn giản
-            const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
-            const htmlElement = document.documentElement;
+            <script>
+              // Dark Mode đơn giản
+              const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
+              const htmlElement = document.documentElement;
 
-            // Xử lý sự kiện chuyển đổi
-            darkModeSwitch.addEventListener('change', function() {
-              if (this.checked) {
-                htmlElement.setAttribute('data-bs-theme', 'dark');
-                document.cookie = "theme=dark; path=/; max-age=31536000"; // Lưu 1 năm
-              } else {
-                htmlElement.setAttribute('data-bs-theme', 'light');
-                document.cookie = "theme=light; path=/; max-age=31536000";
-              }
-            });
-          </script>
+              // Xử lý sự kiện chuyển đổi
+              darkModeSwitch.addEventListener('change', function() {
+                if (this.checked) {
+                  htmlElement.setAttribute('data-bs-theme', 'dark');
+                  document.cookie = "theme=dark; path=/; max-age=31536000"; // Lưu 1 năm
+                } else {
+                  htmlElement.setAttribute('data-bs-theme', 'light');
+                  document.cookie = "theme=light; path=/; max-age=31536000";
+                }
+              });
+            </script>
         </body>
     </div>
   </div>

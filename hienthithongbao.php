@@ -239,7 +239,7 @@ $kq = $conn->query($sql);
             </form>
             <div class="row g-2 mb-4">
               <div class="col-md-2">
-                <a href="hienthithongbao.php" class="btn btn-danger w-100">Xóa</a>
+                <a href="hienthithongbao.php" class="btn btn-danger w-100">Xóa tìm kiếm</a>
               </div>
             </div>
             <!-- bảng render từ database -->

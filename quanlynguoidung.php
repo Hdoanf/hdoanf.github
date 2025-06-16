@@ -148,7 +148,6 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                     <th>TT</th>
                     <th>TÊN NGƯỜI DÙNG</th>
                     <th>TÊN DĂNG NHẬP</th>
-                    <th>MẬT KHẨU</th>
                     <th>CHỨC VỤ</th>
                     <th>ĐƠN VỊ QUẢN LÝ </th>
                     <th>TÁC VỤ</th>
@@ -165,7 +164,6 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                       echo "<td>" . $tt . "</td>";
                       echo "<td>" . $row["name"] . "</td>";
                       echo "<td>" . $row["username"] . "</td>";
-                      echo "<td>" . $row["user_password"] . "</td>";
                       echo "<td>" . $row["use_role"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
                       echo "<td> 

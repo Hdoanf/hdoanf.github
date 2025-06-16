@@ -215,7 +215,7 @@ $kq = $conn->query($sql);
                   <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                 </div>
                 <div class="col-md-2">
-                  <a href="lichsu.php" class="btn btn-danger w-100">Xóa</a>
+                  <a href="lichsu.php" class="btn btn-danger w-100">Xóa tìm kiếm</a>
                 </div>
               </div>
 

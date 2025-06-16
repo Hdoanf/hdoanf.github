@@ -114,9 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
 
               <div class="mb-3">
-                <label class="form-label">Loại tài sản</label>
+                <label class="form-label">Phân loại tài sản</label>
                 <select class="form-select" name="product_category" id="product_category" required disabled>
-                  <option value="">-- Chọn loại tài sản --</option>
+                  <option value="">-- Chọn phân loại tài sản --</option>
                   <?php foreach ($kqcate as $cate): ?>
                     <option value="<?= $cate['id_category'] ?>"
                       data-group="<?= $cate['group_id'] ?? '0' ?>">
@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         const selectedGroup = this.value;
 
         // Reset các select phía sau
-        categorySelect.innerHTML = '<option value="">-- Chọn loại tài sản --</option>'; // Chỉ thêm 1 lần
+        categorySelect.innerHTML = '<option value="">-- Chọn pHân loại tài sản --</option>'; // Chỉ thêm 1 lần
         productSelect.innerHTML = '<option value="">-- Chọn tài sản --</option>';
         productSelect.disabled = true;
 
