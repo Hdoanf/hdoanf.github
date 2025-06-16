@@ -208,7 +208,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
 
         <div class=" card mt-4">
           <div class="card-body">
-            <h2 class="card-title mb-4">Các danh mục tài sản hiện có </h2>
+            <h2 class="card-title mb-4">Các tài sản hiện có </h2>
             <div class="d-flex flex-wrap gap-3">
               <?php
               $product = "select * from `product` ";

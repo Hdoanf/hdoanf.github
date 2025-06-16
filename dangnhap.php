@@ -18,6 +18,7 @@ if (isset($_POST["usn"]) && isset($_POST["pass"])) {
     session_start();
     $_SESSION['user'] = $user['username'];
     $_SESSION['donvi'] = $user['units'];      // ví dụ: CNT
+    $_SESSION['id'] = $user['id'];
     $_SESSION['quyenhan'] = $user['use_role'];
     if ($user['use_role'] === "user") {
       header("Location: nguoidung.php");

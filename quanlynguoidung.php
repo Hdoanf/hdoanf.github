@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION['admin'] !== 'admin') {
+  header("Location: dangnhap.php");
+  exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -31,7 +37,6 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
   <title>Quản lý tài sản </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
@@ -55,7 +60,7 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
               <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2"><?php $user = $_SESSION['user'];
+                <p class="mb-0 ms-2"><?php $user = $_SESSION['admin'];
                                       echo $user ?></p>
               </button>
               <ul class="dropdown-menu">
@@ -166,14 +171,19 @@ unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
                       echo "<td>" . $row["username"] . "</td>";
                       echo "<td>" . $row["use_role"] . "</td>";
                       echo "<td>" . $row["units"] . "</td>";
-                      echo "<td> 
-                        <button class='btn btn-sm btn-outline-warning' onclick='suataisan(\"" . $row["id"] . "\")'>
-                            <i class='bi bi-pencil-square'></i>
-                        </button>
-                        <button class='btn btn-outline-danger btn-sm' onclick='xoa(\"" . $row["id"] . "\")'>
-                            <i class='bi bi-trash-fill'></i>
-                        </button>
-                      </td>";
+                      if ($_SESSION['id'] == $row["id"]) {
+                        echo "<td class='text-muted fst-italic'>Tài khoản đang đăng nhập</td>";
+                      } else {
+                        echo "<td>
+                      <button class='btn btn-sm btn-outline-warning me-1' onclick='suataisan(\"{$row["id"]}\")'>
+                        <i class='bi bi-pencil-square'></i>
+                      </button>
+                      <button class='btn btn-sm btn-outline-danger' onclick='xoa(\"{$row["id"]}\")'>
+                        <i class='bi bi-trash-fill'></i>
+                      </button>
+                    </td>";
+                      }
+
                       $tt++;
                       echo "</tr>";
                     }

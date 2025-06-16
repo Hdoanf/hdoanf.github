@@ -171,7 +171,7 @@ $kq = $conn->query($sql);
                 <h5>Hướng Dẫn Sử Dụng</h5>
               </div>
               <div class="container">
-                <h1 class="mb-5 text-primary">HƯỚNG DẪN CHI TIẾT MỘT SỐ CHỨC NĂNG PHẦN MỀM QUẢN LÝ TÀI SẢN</h1>
+                <h1 class="mb-5 text-primary mt-4">HƯỚNG DẪN CHI TIẾT MỘT SỐ CHỨC NĂNG PHẦN MỀM QUẢN LÝ TÀI SẢN</h1>
 
                 <div class="section">
                   <h2>1. Quản lý tài sản</h2>

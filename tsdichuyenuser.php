@@ -76,7 +76,7 @@ $kq = $conn->query($sql);
       <a class="navbar-brand" href="#">
         <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
           height="30" class="d-inline-block align-text-top me-2" alt="Logo">
-        Quản lý tài sản của admin
+        Quản lý tài sản
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
