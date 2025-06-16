@@ -165,101 +165,124 @@ $kq = $conn->query($sql);
       <main class=" col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
         <body>
-          <div class="container mt-4 mb-3">
+          <div class="container mt-4">
             <div class="card">
               <div class="card-header">
-                <h5>Cài đặt Dark Mode</h5>
+                <h5>Hướng Dẫn Sử Dụng</h5>
               </div>
-              <div class="card-body">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="simpleDarkModeSwitch"
-                    <?php echo isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark' ? 'checked' : ''; ?>>
-                  <label class="form-check-label" for="simpleDarkModeSwitch">Bật Dark Mode</label>
+              <div class="container">
+                <h1 class="mb-5 text-primary">HƯỚNG DẪN CHI TIẾT MỘT SỐ CHỨC NĂNG PHẦN MỀM QUẢN LÝ TÀI SẢN</h1>
+
+                <div class="section">
+                  <h2>1. Quản lý tài sản</h2>
+                  <p><strong>Chức năng:</strong> Quản lý thông tin tài sản: thêm, sửa, xóa, tìm kiếm và quét mã vạch.</p>
+                  <ul>
+                    <li>Mở mục "Quản lý tài sản" trong thanh Sidebar.</li>
+                    <img src="img/sts.png" alt="">
+                    <li>Nhập từ khóa, chọn loại tài sản hoặc tình trạng → nhấn <strong>"Tìm kiếm"</strong>.</li>
+                    <img src="img/sc.png" width="80%" alt="">
+                    <li>Nhấn <strong>"Thêm"</strong> để thêm tài sản mới → điền thông tin và lưu lại.</li>
+                    <img src="img/them.png" width="40%" alt="">
+                    <li>Chọn <strong>"Quét mã vạch"</strong> để hiển thị tài sản nhanh qua barcode.</li>
+
+                    <li>Sử dụng biểu tượng 👁, ✏, 🗑 để xem, chỉnh sửa hoặc xóa tài sản.</li>
+                  </ul>
                 </div>
-                <p class="text-muted mt-2">Chế độ tối giúp giảm mỏi mắt khi sử dụng vào ban đêm.</p>
+
+                <div class="section">
+                  <h2>2. Quản lý người dùng</h2>
+                  <p><strong>Chức năng:</strong> Phân quyền, chỉnh sửa và xóa tài khoản người dùng trong hệ thống.</p>
+                  <ul>
+                    <li>Vào "Quản lý người dùng" trong menu.</li>
+                    <img src="img/nguoidung.png" width="80%" alt="">
+                    <li>Chỉnh sửa bằng nút ✏:</li>
+                    <img src="img/image2.png" width="" alt="">
+                    <li>Xóa bằng nút 🗑 tương ứng mỗi tài khoản.</li>
+                  </ul>
+                </div>
+
+                <div class="section">
+                  <h2>3.Quản lý các mục tài sản</h2>
+                  <p><strong>Chức năng:</strong> Quản lý nhóm/danh mục tài sản như loại, nhóm,...</p>
+                  <ul>
+                    <li>Vào mục "Danh mục tài sản".</li>
+                    <img src="img/ts.png" width="" alt="">
+                    <li>Nhấn "Thêm" để tạo mới hoặc "Xóa" danh mục không còn dùng.</li>
+                  </ul>
+                  <img src="img/themts.png" width="" alt="">
+                </div>
+
+                <div class="section">
+                  <h2>4. Báo cáo tài sản</h2>
+                  <p><strong>Chức năng:</strong> Quản lý báo cáo hỏng và di chuyển tài sản.</p>
+                  <ul>
+                    <li>Chọn "Báo cáo".</li>
+                    <img src="img/baocao.png" width="" alt="">
+                    <li>Biểu đồ tổng tài sản và tài sản hỏng trong năm đó</li>
+                    <img src="img/bieudo.png" width="70%" alt="">
+                    <li>Xuất báo cáo dưới dạng <strong>Excel có dạng như sau: </strong></li>
+                    <img src="img/excel.png" width="70%" alt="">
+                  </ul>
+                </div>
+
+                <div class="section">
+                  <h2>5. Lịch sử thay đổi thông tin</h2>
+                  <p><strong>Chức năng:</strong> Lưu vết các thay đổi dữ liệu tài sản.</p>
+                  <ul>
+                    <li>Vào mục "Lịch sử thay đổi".</li>
+                    <li>Lọc, xem và quản lý các bản ghi thay đổi.</li>
+                    <li>Các chức năng tương tự với quản lý tài sản.</li>
+                  </ul>
+                </div>
+
+                <div class="section">
+                  <h2>6. Kho tài sản</h2>
+                  <p><strong>Chức năng:</strong> Quản lý tài sản chưa sử dụng, đang hỏng hoặc bảo trì.</p>
+                  <ul>
+                    <li>Vào mục "Kho" để tìm kiếm và theo dõi tài sản .</li>
+                    <img src="img/kho.png" width="70%" alt="">
+                    <li>Sử lý khi đưa về kho.</li>
+                    <img src="img/suakho.png" width="70%" alt="">
+                    <li>Thao tác xem,xóa tương tự phần quản lý tài sản.</li>
+                  </ul>
+                </div>
+
+                <div class="section">
+                  <h2>7. Quản lý thông báo</h2>
+                  <p><strong>Chức năng:</strong> Xử lý thông báo tài sản hỏng do người dùng gửi lên.</p>
+                  <ul>
+                    <li>Vào "Thông báo" → xem nội dung cảnh báo.</li>
+                    <img src="img/thongbao.png" width="80%">
+                    <li>Chọn <strong>"Xác nhận đã xử lý (Dấu tích màu xanh)"</strong> sau khi hoàn tất bảo trì.</li>
+                    <img src="img/tacvu.png" width="">
+                    <li>Xóa thông báo khi không còn cần thiết.</li>
+                  </ul>
+                </div>
               </div>
-            </div>
-
-            <!-- Hướng dẫn sử dụng phần mềm quản lý tài sản -->
-
-            <div class="huongdan">
-              <h2>🛠 HƯỚNG DẪN SỬ DỤNG MỘT SỐ CHỨC NĂNG CỦA PHẦN MỀM</h2>
-
-              <h3>📦 1. Thêm tài sản mới</h3>
-              <ol>
-                <li>Vào menu <strong>"Tài sản"</strong> → chọn <strong>"Thêm mới"</strong></li>
-                <li>Nhập đầy đủ thông tin tài sản</li>
-                <li>Nhấn nút <strong>"Lưu"</strong> để hoàn tất</li>
-              </ol>
-
-              <h3>🗃 2. Xem danh sách tài sản</h3>
-              <ol>
-                <li>Vào mục <strong>"Tài sản"</strong> từ thanh menu</li>
-                <li>Tìm kiếm theo mã, tên, hoặc lọc theo loại tài sản</li>
-                <li>Nhấn vào biểu tượng <strong>🔍</strong> để xem chi tiết</li>
-              </ol>
-
-              <h3>🖋 3. Sửa thông tin tài sản</h3>
-              <ol>
-                <li>Nhấn nút <strong>"Sửa"</strong> (biểu tượng ✏) tại tài sản cần chỉnh</li>
-                <li>Cập nhật thông tin và nhấn <strong>"Cập nhật"</strong></li>
-              </ol>
-
-              <h3>🗑 4. Xóa tài sản</h3>
-              <ol>
-                <li>Nhấn <strong>"Xóa"</strong> (biểu tượng 🗑) tại tài sản muốn xóa</li>
-                <li>Xác nhận khi hệ thống yêu cầu</li>
-              </ol>
-
-              <h3>📂 5. Quản lý loại tài sản</h3>
-              <ol>
-                <li>Vào menu <strong>"Loại tài sản"</strong> để thêm, sửa, xóa loại</li>
-                <li>Lưu ý: Chỉ xóa loại khi không còn tài sản nào đang sử dụng</li>
-              </ol>
-
-              <h3>🧑‍💼 6. Phân quyền người dùng</h3>
-              <ol>
-                <li>Chỉ admin có thể vào <strong>"Quản lý người dùng"</strong></li>
-                <li>Chỉnh sửa quyền người dùng và nhấn <strong>"Lưu"</strong></li>
-              </ol>
-
-              <h3>🔍 7. Tra cứu tài sản bằng mã vạch</h3>
-              <ol>
-                <li>Vào mục <strong>"Tra cứu"</strong></li>
-                <li>Dùng đầu đọc mã vạch quét tài sản</li>
-                <li>Hệ thống hiển thị thông tin tương ứng</li>
-              </ol>
-
-              <h3>📊 8. Xem báo cáo tài sản</h3>
-              <ol>
-                <li>Vào mục <strong>"Báo cáo"</strong> và chọn tiêu chí lọc</li>
-                <li>Nhấn <strong>"Xem báo cáo"</strong></li>
-                <li>Có thể xuất ra file Excel hoặc PDF</li>
-              </ol>
             </div>
           </div>
 
           <!-- Bootstrap JS + Popper -->
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-          <! echo '<div class="summary"> <br> </div>' ;-- Font Awesome -->
-            <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+          <!-- Font Awesome -->
+          <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-            <script>
-              // Dark Mode đơn giản
-              const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
-              const htmlElement = document.documentElement;
+          <script>
+            // Dark Mode đơn giản
+            const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
+            const htmlElement = document.documentElement;
 
-              // Xử lý sự kiện chuyển đổi
-              darkModeSwitch.addEventListener('change', function() {
-                if (this.checked) {
-                  htmlElement.setAttribute('data-bs-theme', 'dark');
-                  document.cookie = "theme=dark; path=/; max-age=31536000"; // Lưu 1 năm
-                } else {
-                  htmlElement.setAttribute('data-bs-theme', 'light');
-                  document.cookie = "theme=light; path=/; max-age=31536000";
-                }
-              });
-            </script>
+            // Xử lý sự kiện chuyển đổi
+            darkModeSwitch.addEventListener('change', function() {
+              if (this.checked) {
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+                document.cookie = "theme=dark; path=/; max-age=31536000"; // Lưu 1 năm
+              } else {
+                htmlElement.setAttribute('data-bs-theme', 'light');
+                document.cookie = "theme=light; path=/; max-age=31536000";
+              }
+            });
+          </script>
         </body>
     </div>
   </div>
