@@ -4,15 +4,7 @@ require __DIR__ . '/vendor/autoload.php';
 //
 use Picqer\Barcode\BarcodeGeneratorHTML;
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-  echo "hình như chưa kết nối được ";
-}
-$conn->set_charset('utf8mb4');
+require_once __DIR__ . '/config.php';
 
 if ($conn->connect_error) {
   die("Kết nối thất bại: " . $conn->connect_error);

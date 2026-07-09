@@ -4,17 +4,7 @@ header("Content-Disposition: attachment; filename=baocao_taisan_hong.xls");
 header("Pragma: no-cache");
 header("Expires: 0");
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-  die("Kết nối thất bại: " . $conn->connect_error);
-}
-
-$conn->set_charset('utf8mb4');
+require_once __DIR__ . '/config.php';
 
 // phan quyen
 session_start();

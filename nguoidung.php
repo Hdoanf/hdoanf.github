@@ -7,12 +7,7 @@ if (!isset($_SESSION['user']) || $_SESSION['quyenhan'] !== 'user') {
 }
 
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-$conn = new mysqli($servername, $username, $password, $dbname);
-$conn->set_charset('utf8mb4');
+require_once __DIR__ . '/config.php';
 
 // Lấy thông tin đơn vị của user từ session
 
@@ -357,7 +352,7 @@ $kq = $conn->query($sql);
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script src="assets/main.js"></script>
 </body>
 
 </html>

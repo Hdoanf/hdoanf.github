@@ -1,13 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-  echo "hình như chưa kết nối được ";
-}
-
+require_once __DIR__ . '/../config.php';
 
 $getid = $_GET['id'];
 $id = $conn->real_escape_string($getid);

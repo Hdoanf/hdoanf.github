@@ -1,17 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "barcode";
-
-// Kết nối database
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-  echo "hình như chưa kết nối được ";
-  die();
-}
-
-$conn->set_charset('utf8mb4');
+require_once __DIR__ . '/../config.php';
 
 $sqlunits = "SELECT * FROM units
 ORDER BY
