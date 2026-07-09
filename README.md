@@ -14,7 +14,12 @@ composer require phpoffice/phpword
 ## Cấu trúc thư mục
 
 - `config.php` — kết nối database dùng chung (chỉnh sửa nếu server/user/pass khác)
-- `assets/` — CSS, JS
+- `pages/` — các trang giao diện chính (đăng nhập, tài sản, kho, người dùng...)
+- `actions/` — script xử lý backend không có giao diện chính (xuất báo cáo, thêm/xoá qua modal)
+  - `actions/them/` — xử lý thêm loại/nhóm/danh mục tài sản
+  - `actions/delete/` — xử lý xoá người dùng/tài sản
+- `assets/` — CSS, JS dùng chung
 - `sql/` — file dump database (`barcode.sql`)
-- `them/`, `delete/` — các trang xử lý thêm/xoá dữ liệu
 - `vendor/` — thư viện composer, tự sinh bằng `composer install`, không commit lên git
+
+Trang vào đầu tiên: `pages/dangnhap.php`.
