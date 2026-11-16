@@ -1,203 +1,176 @@
 <?php
-
 require_once __DIR__ . '/../config.php';
-
 session_start();
-$toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
-$toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
-echo "<script>console.log('$toastthanhcong')</script>";
-unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
-
-$search = "";
-$loaits = "";
-$tinh_trang = "";
-$sql = "SELECT * FROM `full_information` WHERE 1=1";
-if (isset($_GET['search']) || isset($_GET['loaitaisan']) || isset($_GET['tinhtrang'])) {
-  $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-  $loaits = isset($_GET['loaitaisan']) ? trim($_GET['loaitaisan']) : '';
-  $tinh_trang = isset($_GET['tinhtrang']) ? trim($_GET['tinhtrang']) : '';
-  // lấy id của bảng product
-  if (!empty($search)) {
-    $tts = $conn->query("SELECT * FROM `product` WHERE `name_product` like '%$search%'");
-    if ($tts->num_rows > 0) {
-      $tts2 = $tts->fetch_assoc();
-      $tentk = $tts2["id_product"]; //lấy id của bảng product ứng với tên là biển seach
-      echo "<script>console.log('$tentk')</script>";
-      $sql .= " AND `product_name` LIKE '%$tentk%'";  //select với tên sản phẩm bên bảng full là id của bảng product
-    } else {
-      $sql = "SELECT * FROM `full_information` WHERE 0";
-    }
-  }
-  if (!empty($loaits)) {
-    $sql .= " AND `product_category` = '$loaits'"; //nối
-  }
-  if (!empty($tinh_trang)) {
-    $sql .= " AND `product_status` = '$tinh_trang'";
-  }
-}
-$kq = $conn->query($sql);
-
-
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý tài sản </title>
+  <title>Cài đặt · Quản trị</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../assets/dashboard-craft.css">
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30"
-          height="30" class="d-inline-block align-text-top me-2" alt="Logo">
-        Quản lý tài sản của admin
+  <!-- Quiet Header -->
+  <header class="app-header">
+    <div class="d-flex align-items-center gap-3">
+      <a href="admin.php" class="brand-mark">
+        <span class="brand-dot"></span>
+        <span>Hệ thống Quản lý Tài sản</span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <div class="dropdown dropstart text-end">
-              <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center"
-                data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle mb-0 ms-2 "></i>
-                <p class="mb-0 ms-2">Dashboard</p>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Thông tin</a></li>
-                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-              </ul>
-            </div>
-          </li>
+      <span class="text-muted" style="font-size: 13px;">/</span>
+      <span style="font-size: 13px; color: var(--color-ink-2); font-weight: 500;">Cài đặt hệ thống</span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="header-status-pill">
+        <span class="status-dot-live"></span>
+        <span>Sẵn sàng</span>
+      </div>
+      <div class="dropdown">
+        <button class="btn-quiet dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-person text-secondary"></i>
+          <span>Admin</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 8px; border-color: var(--color-line); font-size: 13px;">
+          <li><a class="dropdown-item py-1" href="caidat.php"><i class="bi bi-gear me-2 text-secondary"></i>Cài đặt</a></li>
+          <li><hr class="dropdown-divider my-1"></li>
+          <li><a class="dropdown-item py-1 text-danger" href="dangnhap.php"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
         </ul>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <div class="container-fluid">
-    <div class="row">
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
-          <ul class="nav flex-column ">
-            <li class="nav-item">
-              <a class="nav-link " href=" admin.php">
-                <i class="bi bi-grid-1x2"></i> Tài sản
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="taisan.php">
-                Mục tài sản đã có sẵn
-              </a>
-            </li>
-            <li class="nav-item">
-              <div>
-                <button class="btn nav-link" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#themtaisan" aria-expanded="false" aria-controls="themtaisan">
-                  Báo cáo
-                </button>
-                <div class="collapse" id="themtaisan">
-                  <ul class="nav">
-                    <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tshong.php">
-                        Báo cáo hỏng
-                      </a>
-                    </li>
-                    <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tsdichuyen.php">
-                        Báo cáo di chuyển tài sản
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="lichsu.php">
-                Lịch sử
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="kho.php">
-                Kho
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="hienthithongbao.php">
-                Thông Báo
-              </a>
-            </li>
-            <li class="nav-item nav-pills">
-              <a class="nav-link active" href="caidat.php">
-                <i class="bi bi-gear "></i> Cài đặt
-              </a>
-            </li>
-          </ul>
+  <div class="d-flex">
+    <!-- Calm Sidebar -->
+    <aside class="app-sidebar">
+      <div class="nav-section-label">Quản lý</div>
+      <ul class="nav flex-column mb-3">
+        <li class="nav-item">
+          <a class="nav-link" href="admin.php">
+            <i class="bi bi-grid-1x2"></i>
+            <span>Tài sản</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="taisan.php">
+            <i class="bi bi-tags"></i>
+            <span>Mục có sẵn</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="quanlynguoidung.php">
+            <i class="bi bi-people"></i>
+            <span>Người dùng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="kho.php">
+            <i class="bi bi-archive"></i>
+            <span>Kho</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-section-label">Giám sát</div>
+      <ul class="nav flex-column mb-3">
+        <li class="nav-item">
+          <a class="nav-link" href="tshong.php">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span>Báo cáo hỏng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tsdichuyen.php">
+            <i class="bi bi-arrow-left-right"></i>
+            <span>Báo cáo di chuyển</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="lichsu.php">
+            <i class="bi bi-clock-history"></i>
+            <span>Lịch sử</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="hienthithongbao.php">
+            <i class="bi bi-bell"></i>
+            <span>Thông báo</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-section-label">Hệ thống</div>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="caidat.php">
+            <i class="bi bi-sliders"></i>
+            <span>Cài đặt</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Workspace -->
+    <main class="app-workspace">
+      <section class="content-panel" style="max-width: 600px;">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h1 class="panel-title">Tùy chỉnh hệ thống</h1>
+          </div>
         </div>
-      </nav>
 
-      <main class=" col-md-9 ms-sm-auto col-lg-10 px-md-4">
-
-        <body>
-          <div class="container mt-4">
-            <div class="card">
-              <div class="card-header">
-                <h5>Cài đặt Dark Mode</h5>
-              </div>
-              <div class="card-body">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="simpleDarkModeSwitch"
-                    <?php echo isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark' ? 'checked' : ''; ?>>
-                  <label class="form-check-label" for="simpleDarkModeSwitch">Bật Dark Mode</label>
-                </div>
-                <p class="text-muted mt-2">Chế độ tối giúp giảm mỏi mắt khi sử dụng vào ban đêm.</p>
-              </div>
+        <div class="p-4">
+          <div class="mb-4">
+            <h6 class="fw-bold mb-1" style="font-size: 14px;">Chế độ giao diện (Dark Mode)</h6>
+            <p class="text-muted" style="font-size: 13px;">Giao diện tuân thủ tiêu chuẩn tương phản WCAG 2.1.</p>
+            <div class="form-check form-switch mt-2">
+              <input class="form-check-input" type="checkbox" id="simpleDarkModeSwitch"
+                <?php echo isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark' ? 'checked' : ''; ?>>
+              <label class="form-check-label" for="simpleDarkModeSwitch" style="font-size: 13px;">Bật chế độ tối</label>
             </div>
           </div>
 
-          <!-- Bootstrap JS + Popper -->
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-          <!-- Font Awesome -->
-          <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+          <hr style="border-color: var(--color-line);">
 
-          <script>
-            // Dark Mode đơn giản
-            const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
-            const htmlElement = document.documentElement;
-
-            // Xử lý sự kiện chuyển đổi
-            darkModeSwitch.addEventListener('change', function() {
-              if (this.checked) {
-                htmlElement.setAttribute('data-bs-theme', 'dark');
-                document.cookie = "theme=dark; path=/; max-age=31536000"; // Lưu 1 năm
-              } else {
-                htmlElement.setAttribute('data-bs-theme', 'light');
-                document.cookie = "theme=light; path=/; max-age=31536000";
-              }
-            });
-          </script>
-        </body>
-    </div>
+          <div>
+            <h6 class="fw-bold mb-1" style="font-size: 14px;">Thông tin máy chủ</h6>
+            <div class="mt-2" style="font-size: 13px; color: var(--color-ink-2);">
+              <div class="d-flex justify-content-between py-1 border-bottom">
+                <span class="text-muted">Cơ sở dữ liệu</span>
+                <span class="font-monospace">MariaDB 13.0 (Port 3306)</span>
+              </div>
+              <div class="d-flex justify-content-between py-1 border-bottom">
+                <span class="text-muted">Môi trường thực thi</span>
+                <span class="font-monospace">PHP 8.5 (Built-in Server)</span>
+              </div>
+              <div class="d-flex justify-content-between py-1">
+                <span class="text-muted">Định dạng mã vạch</span>
+                <span class="font-monospace">Code 128 (1D Barcode)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const darkModeSwitch = document.getElementById('simpleDarkModeSwitch');
+    darkModeSwitch.addEventListener('change', function() {
+      if (this.checked) {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+        document.cookie = "theme=dark; path=/; max-age=31536000";
+      } else {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+        document.cookie = "theme=light; path=/; max-age=31536000";
+      }
+    });
+  </script>
 </body>
-
 </html>

@@ -1,0 +1,481 @@
+/* ==========================================================================
+   Design Tokens & Craft Guidelines (Skill: dashboard-design)
+   House Style: Calm, Crafted, Wordless. 
+   Stephen Few & Edward Tufte principles:
+   - Quiet: Grey for normal data, warm only for attention/issues.
+   - Wordless: Tabular numbers, compact baselines, zero sentences.
+   - Density: 14px base, 13px tables, 16px icons.
+   ========================================================================== */
+
+:root {
+  --color-page: #f8f8f6;
+  --color-card: #ffffff;
+  --color-soft: #f1f1ef;
+  --color-side: #fbfbf9;
+  --color-ink: #17171a;
+  --color-ink-2: #48484d;
+  --color-muted: #66666d;
+  --color-line: rgba(0, 0, 0, 0.08);
+  --color-line-strong: rgba(0, 0, 0, 0.16);
+
+  --color-accent: #3e63dd;
+  --color-accent-subtle: rgba(62, 99, 221, 0.08);
+  --color-accent-border: rgba(62, 99, 221, 0.22);
+
+  --color-good: #0f7f57;
+  --color-good-subtle: rgba(15, 127, 87, 0.08);
+  --color-good-border: rgba(15, 127, 87, 0.2);
+
+  --color-warn: #c98a00;
+  --color-warn-subtle: rgba(201, 138, 0, 0.09);
+
+  --color-down: #d23f45;
+  --color-down-subtle: rgba(210, 63, 69, 0.08);
+  --color-down-border: rgba(210, 63, 69, 0.2);
+
+  --color-live: #12a150;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
+  --shadow-dropdown: 0 8px 24px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+body {
+  background-color: var(--color-page);
+  color: var(--color-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* App Header */
+.app-header {
+  height: 52px;
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+.header-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-soft);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--color-line);
+}
+
+.status-dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-live);
+  box-shadow: 0 0 0 2px rgba(18, 161, 80, 0.2);
+}
+
+/* Sidebar */
+.app-sidebar {
+  width: 220px;
+  background: var(--color-side);
+  border-right: 1px solid var(--color-line);
+  min-height: calc(100vh - 52px);
+  padding: 16px 12px;
+  flex-shrink: 0;
+}
+
+.nav-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  padding: 8px 10px 4px;
+}
+
+.app-sidebar .nav-item {
+  margin-bottom: 2px;
+}
+
+.app-sidebar .nav-link {
+  color: var(--color-ink-2);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.app-sidebar .nav-link i {
+  font-size: 14px;
+  color: var(--color-muted);
+  width: 16px;
+  text-align: center;
+}
+
+.app-sidebar .nav-link:hover {
+  background-color: var(--color-soft);
+  color: var(--color-ink);
+}
+
+.app-sidebar .nav-link.active {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.app-sidebar .nav-link.active i {
+  color: var(--color-accent);
+}
+
+/* Main Content Workspace */
+.app-workspace {
+  flex-grow: 1;
+  padding: 24px 28px;
+  max-width: 1600px;
+}
+
+/* KPI Strip: One consolidated card, divided by hairlines (per Few / dashboard-design) */
+.kpi-strip {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.kpi-tile {
+  padding: 16px 20px;
+  border-right: 1px solid var(--color-line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kpi-tile:last-child {
+  border-right: none;
+}
+
+.kpi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.kpi-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.kpi-icon-box {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.kpi-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.kpi-value {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.kpi-baseline {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.kpi-baseline.good {
+  color: var(--color-good);
+}
+
+.kpi-baseline.warn {
+  color: var(--color-down);
+}
+
+/* Target mini-bar (Tick/track style) */
+.kpi-tick-track {
+  height: 4px;
+  background: var(--color-line);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.kpi-tick-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* Panel Card */
+.content-panel {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-line);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.panel-counter {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--color-muted);
+  background: var(--color-soft);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+}
+
+/* Action Controls (Quiet style) */
+.toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-quiet {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-card);
+  color: var(--color-ink);
+  transition: all 0.12s ease;
+  text-decoration: none;
+}
+
+.btn-quiet:hover {
+  background: var(--color-soft);
+  color: var(--color-ink);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.btn-accent:hover {
+  background: #3353be;
+  color: #ffffff;
+}
+
+/* Filter Row: compact, calm */
+.filter-strip {
+  padding: 10px 20px;
+  background: var(--color-side);
+  border-bottom: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input-compact, .select-compact {
+  height: 32px;
+  font-size: 13px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-card);
+  color: var(--color-ink);
+  outline: none;
+}
+
+.input-compact:focus, .select-compact:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-subtle);
+}
+
+/* Table Style: Wordless, Honest, Dense */
+.table-honest {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: collapse;
+}
+
+.table-honest thead th {
+  background: var(--color-side);
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--color-line);
+  white-space: nowrap;
+}
+
+.table-honest tbody td {
+  padding: 10px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: middle;
+  color: var(--color-ink-2);
+}
+
+.table-honest tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-honest tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.015);
+}
+
+.table-honest td.num, .table-honest th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Status Chips: Subtle pale tints, attention only on issues */
+.chip-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.chip-status.active {
+  background: var(--color-good-subtle);
+  color: var(--color-good);
+  border: 1px solid var(--color-good-border);
+}
+
+.chip-status.problem {
+  background: var(--color-down-subtle);
+  color: var(--color-down);
+  border: 1px solid var(--color-down-border);
+}
+
+.unit-tag {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  color: var(--color-muted);
+  background: var(--color-soft);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+}
+
+/* Action button row inside table */
+.row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-icon-cell {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.btn-icon-cell:hover {
+  background: var(--color-soft);
+  color: var(--color-ink);
+  border-color: var(--color-line);
+}
+
+.btn-icon-cell.delete:hover {
+  background: var(--color-down-subtle);
+  color: var(--color-down);
+  border-color: var(--color-down-border);
+}

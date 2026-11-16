@@ -1,6 +1,6 @@
 <?php
 // lay thu vien tao ma vach
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 //
 use Picqer\Barcode\BarcodeGeneratorHTML;
 
@@ -11,23 +11,28 @@ if ($conn->connect_error) {
 }
 
 
-$id = $_GET['id'];
+$id = $conn->real_escape_string($_GET['id']);
 
-// lay du lieu
-$sql = "SELECT * FROM user_choices WHERE barcode = '$id' ORDER BY `user_choices`.`created_at` DESC ";
+// lay du lieu tu user_choices hoac full_information
+$sql = "SELECT * FROM user_choices WHERE barcode = '$id' ORDER BY `user_choices`.`created_at` DESC";
 $result = $conn->query($sql);
-$fullsql = "SELECT `note`,`old_unit`   FROM `full_information` WHERE `barcode`= '$id'";
-$kq = $conn->query($fullsql);
-$rowfull = $kq->fetch_assoc();
-if ($result->num_rows > 0) {
+
+if ($result && $result->num_rows > 0) {
   $row = $result->fetch_assoc();
-  $data = $row["barcode"];
-  $taoma = new BarcodeGeneratorHTML();
-  $mavach = $taoma->getBarcode($data, $taoma::TYPE_CODE_128);
 } else {
-  echo "Không tìm thấy tài sản.";
-  exit;
+  $sql_full = "SELECT * FROM full_information WHERE barcode = '$id'";
+  $res_full = $conn->query($sql_full);
+  if ($res_full && $res_full->num_rows > 0) {
+    $row = $res_full->fetch_assoc();
+  } else {
+    echo "<div class='alert alert-warning my-3'>Không tìm thấy tài sản với mã này.</div>";
+    exit;
+  }
 }
+
+$data = $row["barcode"];
+$taoma = new BarcodeGeneratorHTML();
+$mavach = $taoma->getBarcode($data, $taoma::TYPE_CODE_128);
 
 
 ?>
@@ -101,36 +106,27 @@ if ($result->num_rows > 0) {
         </td>
       <tr>
       <tr>
-        <th>Phòng cũ</th>
+        <th>Phòng / Đơn vị</th>
         <td>
           <?php
-          //echo 
-          $id_old_unit = $rowfull["old_unit"];
-          $old_unit_sql = "SELECT * FROM `units` WHERE `id_units`= '$id_old_unit'";
-          $result_unit = $conn->query($old_unit_sql);
-          $old_unit = $result_unit->fetch_assoc();
-          echo $old_unit['units'];
+          echo isset($row["units"]) ? htmlspecialchars($row["units"]) : '—';
           ?>
         </td>
       </tr>
-      <th>Trạng Thái</th>
-      <?php
-      $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
-      echo "<td><span class='$status'>" . $row["product_status"] . "</span></td>"; ?>
+      <tr>
+        <th>Trạng Thái</th>
+        <?php
+        $status = ($row["product_status"] == 'active') ? 'badge bg-success' : 'badge bg-danger';
+        echo "<td><span class='$status'>" . htmlspecialchars($row["product_status"]) . "</span></td>"; ?>
       </tr>
 
       <tr>
         <th>Mã Vạch</th>
         <td>
-          <?php echo $mavach; ?>
-        </td>
-      </tr>
-      <tr>
-        <th>Ghi chú</th>
-        <td>
-          <?php
-          echo $rowfull["note"];
-          ?>
+          <div class="p-2 bg-light border rounded text-center">
+            <?php echo $mavach; ?>
+            <div class="mt-2 font-monospace fw-bold text-secondary"><?php echo htmlspecialchars($data); ?></div>
+          </div>
         </td>
       </tr>
 

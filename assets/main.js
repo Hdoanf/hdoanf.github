@@ -1,66 +1,69 @@
 function xemchitiet(id) {
   // Hiển thị modal
-  var myModal = new bootstrap.Modal(document.getElementById('modal'));
+  var myModal = new bootstrap.Modal(document.getElementById("modal"));
   myModal.show();
 
   //lay du lieu cua file chitiet cho vao trong the modalbody o tren
   fetch(`chitiet.php?id=${id}`)
-    .then(response => response.text())
-    .then(data => {
+    .then((response) => response.text())
+    .then((data) => {
       document.getElementById("modalbody").innerHTML = data;
     })
-    .catch(error => {
-      console.log(error)
-      document.getElementById("modalbody").innerHTML = '<p class="text-danger">Lỗi</p>';
+    .catch((error) => {
+      console.log(error);
+      document.getElementById("modalbody").innerHTML =
+        '<p class="text-danger">Lỗi</p>';
     });
 }
 
 function suataisan(id) {
-  var myModal = new bootstrap.Modal(document.getElementById('modalSua'));
+  var myModal = new bootstrap.Modal(document.getElementById("modalSua"));
   myModal.show();
   fetch(`sua.php?id=${id}`)
-    .then(response => response.text())
-    .then(data => {
+    .then((response) => response.text())
+    .then((data) => {
       document.getElementById("modalbodysua").innerHTML = data;
     })
-    .catch(error => {
-      console.log(error)
-      document.getElementById("modalbodysua").innerHTML = '<p class="text-danger">Lỗi</p>';
+    .catch((error) => {
+      console.log(error);
+      document.getElementById("modalbodysua").innerHTML =
+        '<p class="text-danger">Lỗi</p>';
     });
 }
 
 let tscanxoa = null;
 
 function xoa(id) {
-  tscanxoa = id; // luu barcode vao bien nay 
-  var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
+  tscanxoa = id; // luu barcode vao bien nay
+  var myModal = new bootstrap.Modal(document.getElementById("modalXoa"));
   myModal.show();
 }
 
-
-document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
+document.getElementById("btnXacNhanXoa").addEventListener("click", function () {
   if (tscanxoa) {
     fetch(`xoa.php?id=${tscanxoa}`)
-      .then(response => response.text()) //lay du lieu xoa
-      .then(data => {
+      .then((response) => response.text()) //lay du lieu xoa
+      .then((data) => {
         console.log(data);
 
         // toast xoa
-        var toast = document.getElementById('toast');
-        var toastBody = document.getElementById('toastbd');
+        var toast = document.getElementById("toast");
+        var toastBody = document.getElementById("toastbd");
         toastBody.innerHTML = "Xóa thành công";
         var toast = new bootstrap.Toast(toast);
         toast.show();
 
         // an modal
-        var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoa'));
+        var modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalXoa"),
+        );
         if (modal) modal.hide();
 
         setTimeout(() => {
           location.reload();
         }, 1500);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Lỗi:", error);
       });
   }
@@ -68,38 +71,39 @@ document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
 
 //them
 function themtaisan() {
-  var myModal = new bootstrap.Modal(document.getElementById('modalThem'));
+  var myModal = new bootstrap.Modal(document.getElementById("modalThem"));
   myModal.show();
   fetch(`them.php`)
-    .then(response => response.text())
-    .then(data => {
+    .then((response) => response.text())
+    .then((data) => {
       document.getElementById("modalbodythem").innerHTML = data;
     })
-    .catch(error => {
-      console.log(error)
-      document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
+    .catch((error) => {
+      console.log(error);
+      document.getElementById("modalbodythem").innerHTML =
+        '<p class="text-danger">Lỗi</p>';
     });
 }
 
 function thongbao(id) {
-  var myModal = new bootstrap.Modal(document.getElementById('modalthongbao'));
+  var myModal = new bootstrap.Modal(document.getElementById("modalthongbao"));
   myModal.show();
 
   fetch(`thongbaohong.php?id=${id}`)
-    .then(response => response.text())
-    .then(data => {
+    .then((response) => response.text())
+    .then((data) => {
       document.getElementById("modalbodythongbao").innerHTML = data;
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
-      document.getElementById("modalbodythongbao").innerHTML = '<p class="text-danger">Lỗi</p>';
+      document.getElementById("modalbodythongbao").innerHTML =
+        '<p class="text-danger">Lỗi</p>';
     });
 }
 
-
 // hien thi toast
-document.addEventListener('DOMContentLoaded', function() {
-  var toast = document.getElementById('toast');
+document.addEventListener("DOMContentLoaded", function () {
+  var toast = document.getElementById("toast");
   if (toast.innerText.trim() !== "") {
     var toast = new bootstrap.Toast(toast);
     toast.show();
@@ -109,35 +113,36 @@ document.addEventListener('DOMContentLoaded', function() {
 let idthongbao = null;
 
 function xoathongbao(id) {
-  idcanxoa = id; // luu barcode vao bien nay 
-  var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
+  idcanxoa = id; // luu barcode vao bien nay
+  var myModal = new bootstrap.Modal(document.getElementById("modalXoa"));
   myModal.show();
 }
 
-
-document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
+document.getElementById("btnXacNhanXoa").addEventListener("click", function () {
   if (idcanxoa) {
     fetch(`xoathongbao.php?id=${idcanxoa}`)
-      .then(response => response.text()) //lay du lieu xoa
-      .then(data => {
+      .then((response) => response.text()) //lay du lieu xoa
+      .then((data) => {
         console.log(data);
 
         // toast xoa
-        var toast = document.getElementById('toast');
-        var toastBody = document.getElementById('toastbd');
+        var toast = document.getElementById("toast");
+        var toastBody = document.getElementById("toastbd");
         toastBody.innerHTML = "Xóa thành công";
         var toast = new bootstrap.Toast(toast);
         toast.show();
 
         // an modal
-        var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoa'));
+        var modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalXoa"),
+        );
         if (modal) modal.hide();
 
         setTimeout(() => {
           location.reload();
         }, 1500);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Lỗi:", error);
       });
   }
@@ -146,35 +151,36 @@ document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
 let idxacnhan = null;
 
 function xacnhan(id) {
-  idxacnhan = id; // luu barcode vao bien nay 
-  var myModal = new bootstrap.Modal(document.getElementById('modalxacnhan'));
+  idxacnhan = id; // luu barcode vao bien nay
+  var myModal = new bootstrap.Modal(document.getElementById("modalxacnhan"));
   myModal.show();
 }
 
-
-document.getElementById("btnxacnhan").addEventListener("click", function() {
+document.getElementById("btnxacnhan").addEventListener("click", function () {
   if (idxacnhan) {
     fetch(`xacnhan.php?id=${idxacnhan}`)
-      .then(response => response.text()) //lay du lieu xoa
-      .then(data => {
+      .then((response) => response.text()) //lay du lieu xoa
+      .then((data) => {
         console.log(data);
 
         // toast xoa
-        var toast = document.getElementById('toast');
-        var toastBody = document.getElementById('toastbd');
+        var toast = document.getElementById("toast");
+        var toastBody = document.getElementById("toastbd");
         toastBody.innerHTML = "Thành công";
         var toast = new bootstrap.Toast(toast);
         toast.show();
 
         // an modal
-        var modal = bootstrap.Modal.getInstance(document.getElementById('modalxacnhan'));
+        var modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalxacnhan"),
+        );
         if (modal) modal.hide();
 
         setTimeout(() => {
           location.reload();
         }, 1500);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Lỗi:", error);
       });
   }
@@ -182,7 +188,7 @@ document.getElementById("btnxacnhan").addEventListener("click", function() {
 
 function quetma() {
   // Hiển thị modal
-  var myModal = new bootstrap.Modal(document.getElementById('modalscan'));
+  var myModal = new bootstrap.Modal(document.getElementById("modalscan"));
   myModal.show();
 
   // Load nội dung quét mã với kích thước lớn hơn
@@ -205,12 +211,12 @@ function quetma() {
 
   // Khởi tạo scanner với khung quét hình chữ nhật rộng hơn
   const html5QrcodeScanner = new Html5QrcodeScanner(
-    "qr-reader", 
-    { 
-      fps: 10, 
-      qrbox: { width: 400, height: 200 } // Khung quét hình chữ nhật (rộng x cao)
+    "qr-reader",
+    {
+      fps: 10,
+      qrbox: { width: 400, height: 200 }, // Khung quét hình chữ nhật (rộng x cao)
     },
-    /* verbose= */ false
+    /* verbose= */ false,
   );
 
   // Biến lưu trữ scanner để có thể reset
@@ -218,7 +224,7 @@ function quetma() {
 
   function onScanSuccess(decodedText) {
     // Xóa nội dung cũ
-    document.getElementById('thong-tin-taisan').innerHTML = `
+    document.getElementById("thong-tin-taisan").innerHTML = `
       <div class="text-center">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Đang tải...</span>
@@ -229,14 +235,14 @@ function quetma() {
 
     // Gửi barcode lên server để lấy thông tin tài sản
     fetch(`laytaisan.php?barcode=${encodeURIComponent(decodedText)}`)
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('thong-tin-taisan').innerHTML = html;
+      .then((response) => response.text())
+      .then((html) => {
+        document.getElementById("thong-tin-taisan").innerHTML = html;
         // Dừng quét sau khi thành công
         html5QrcodeScanner.clear();
       })
-      .catch(err => {
-        document.getElementById('thong-tin-taisan').innerHTML = `
+      .catch((err) => {
+        document.getElementById("thong-tin-taisan").innerHTML = `
           <div class="alert alert-danger">
             Lỗi khi lấy thông tin tài sản. Mã: ${decodedText}
           </div>
@@ -249,5 +255,5 @@ function quetma() {
 
 // Hàm reset scanner
 function resetScanner() {
-    quetma(); // Khởi tạo lại scanner nếu không có scanner hiện tại
+  quetma(); // Khởi tạo lại scanner nếu không có scanner hiện tại
 }

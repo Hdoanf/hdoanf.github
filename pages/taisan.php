@@ -3,347 +3,285 @@ require_once __DIR__ . '/../config.php';
 session_start();
 $toastthanhcong = isset($_SESSION['thanhcong']) ? $_SESSION['thanhcong'] : "";
 $toastloi = isset($_SESSION['loi']) ? $_SESSION['loi'] : "";
-unset($_SESSION['thanhcong'], $_SESSION['loi']); // xóa session
-
+unset($_SESSION['thanhcong'], $_SESSION['loi']);
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý tài sản </title>
+  <title>Mục tài sản · Quản trị</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../assets/dashboard-craft.css">
+  <style>
+    .modalcao { z-index: 1060 !important; }
+    .modal-backdropcao { z-index: 1050 !important; }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .category-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.12s ease;
+    }
+    .category-card:hover {
+      border-color: var(--color-line-strong);
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="https://i.pinimg.com/736x/70/54/63/70546384b90a3b386bf16531c859d868.jpg" width="30" height="30"
-          class="d-inline-block align-text-top me-2" alt="Logo">
-        Quản lý tài sản của admin
+  <!-- Quiet Header -->
+  <header class="app-header">
+    <div class="d-flex align-items-center gap-3">
+      <a href="admin.php" class="brand-mark">
+        <span class="brand-dot"></span>
+        <span>Hệ thống Quản lý Tài sản</span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
-          </li>
+      <span class="text-muted" style="font-size: 13px;">/</span>
+      <span style="font-size: 13px; color: var(--color-ink-2); font-weight: 500;">Mục tài sản có sẵn</span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="header-status-pill">
+        <span class="status-dot-live"></span>
+        <span>Sẵn sàng</span>
+      </div>
+      <div class="dropdown">
+        <button class="btn-quiet dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-person text-secondary"></i>
+          <span>Admin</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 8px; border-color: var(--color-line); font-size: 13px;">
+          <li><a class="dropdown-item py-1" href="caidat.php"><i class="bi bi-gear me-2 text-secondary"></i>Cài đặt</a></li>
+          <li><hr class="dropdown-divider my-1"></li>
+          <li><a class="dropdown-item py-1 text-danger" href="dangnhap.php"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
         </ul>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <div class="container-fluid">
-    <div class="row">
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
-          <ul class="nav flex-column ">
-            <li class="nav-item">
-              <a class="nav-link" href="admin.php">
-                <i class="bi bi-grid-1x2"></i> Tài sản
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="quanlynguoidung.php">
-                Quản lý người dùng
-              </a>
-            </li>
-            <li class="nav-item nav-pills">
-              <a class="nav-link active" href="taisan.php">
-                Mục tài sản đã có sẵn
-              </a>
-            </li>
-            <li class="nav-item">
-              <div>
-                <button class="btn nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#themtaisan"
-                  aria-expanded="false" aria-controls="themtaisan">
-                  Báo cáo
-                </button>
-                <div class="collapse" id="themtaisan">
-                  <ul class="nav">
-                    <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tshong.php">
-                        Báo cáo hỏng
-                      </a>
-                    </li>
-                    <li class="nav-item ms-2 ">
-                      <a class="nav-link " href="tsdichuyen.php">
-                        Báo cáo di chuyển tài sản
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="lichsu.php">
-                Lịch sử
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="kho.php">
-                Kho
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="hienthithongbao.php">
-                Thông Báo
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">
-                <i class="bi bi-gear"></i> Cài đặt
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+  <div class="d-flex">
+    <!-- Calm Sidebar -->
+    <aside class="app-sidebar">
+      <div class="nav-section-label">Quản lý</div>
+      <ul class="nav flex-column mb-3">
+        <li class="nav-item">
+          <a class="nav-link" href="admin.php">
+            <i class="bi bi-grid-1x2"></i>
+            <span>Tài sản</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="taisan.php">
+            <i class="bi bi-tags"></i>
+            <span>Mục có sẵn</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="quanlynguoidung.php">
+            <i class="bi bi-people"></i>
+            <span>Người dùng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="kho.php">
+            <i class="bi bi-archive"></i>
+            <span>Kho</span>
+          </a>
+        </li>
+      </ul>
 
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h2 class="card-title mb-4">Các loại tài sản hiện có </h2>
-            <div class="d-flex flex-wrap gap-3">
-              <?php
-              $cate = "select * from `category_product`";
-              $kqcate = $conn->query($cate);
-              if ($kqcate->num_rows > 0) {
-                while ($rowcate = $kqcate->fetch_assoc()) {
-                  echo "<div class='card' style='width: 12rem;'>";
-                  echo "<div class='card-body'>";
-                  echo "<ul class='list-group list-group-flush' >";
-                  echo  "<li class='list-group-item'>ID: " . htmlspecialchars($rowcate["id_category"]) . "</li>";
-                  echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowcate["name_category"]) . "</li>";
-                  echo "</ul>";
-                  echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
-                      <i class='bi bi-trash-fill'></i>
-                        </button>";
-                  echo "</div>";
-                }
-              } else {
-                echo "<p>Không có loại tài sản nào!</p>";
-              }
-              ?>
+      <div class="nav-section-label">Giám sát</div>
+      <ul class="nav flex-column mb-3">
+        <li class="nav-item">
+          <a class="nav-link" href="tshong.php">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span>Báo cáo hỏng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tsdichuyen.php">
+            <i class="bi bi-arrow-left-right"></i>
+            <span>Báo cáo di chuyển</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="lichsu.php">
+            <i class="bi bi-clock-history"></i>
+            <span>Lịch sử</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="hienthithongbao.php">
+            <i class="bi bi-bell"></i>
+            <span>Thông báo</span>
+          </a>
+        </li>
+      </ul>
 
-            </div>
+      <div class="nav-section-label">Hệ thống</div>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="caidat.php">
+            <i class="bi bi-sliders"></i>
+            <span>Cài đặt</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Workspace -->
+    <main class="app-workspace">
+      <section class="content-panel mb-4">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h1 class="panel-title">Loại tài sản (Categories)</h1>
+            <?php
+            $kqcate = $conn->query("SELECT * FROM category_product");
+            $c_count = $kqcate ? $kqcate->num_rows : 0;
+            ?>
+            <span class="panel-counter"><?php echo $c_count; ?> loại</span>
           </div>
-          <div>
-            <button class=" m-3 btn btn-primary" onclick="themtaisanmoi(1)">
-              Thêm
+          <div class="toolbar-actions">
+            <button class="btn-quiet btn-accent" data-bs-toggle="modal" data-bs-target="#modalAddCategory">
+              <i class="bi bi-plus-lg"></i>
+              <span>Thêm loại</span>
             </button>
           </div>
         </div>
 
-        <div class="card mt-4">
-          <div class="card-body">
-            <h2 class="card-title mb-4">Nhóm tài sản hiên có</h2>
-            <div class="d-flex flex-wrap gap-3">
-              <?php
-              $group = "select * from `group_product` ";
-              $kqgroup = $conn->query($group);
-              if ($kqgroup->num_rows > 0) {
-                while ($rowgroup = $kqgroup->fetch_assoc()) {
-                  echo "<div class='card' style='width: 12rem;'>";
-                  echo "<div class='card-body'>";
-                  echo "<ul class='list-group list-group-flush'>";
-                  echo "<li class='list-group-item'>ID: " . htmlspecialchars($rowgroup["id_group"]) . "</li>";
-                  echo "<li class='list-group-item'>Name: " . htmlspecialchars($rowgroup["name_group"]) . "</li>";
-                  echo "</ul>";
-                  echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["id_group"] . "\")'>
-                      <i class='bi bi-trash-fill'></i>
-                        </button>";
-                  echo "</div>";
-                }
-              } else {
-                echo "<p>Không có loại tài sản nào!</p>";
+        <div class="p-3">
+          <div class="category-grid">
+            <?php
+            if ($kqcate && $kqcate->num_rows > 0) {
+              while ($rowcate = $kqcate->fetch_assoc()) {
+                echo "<div class='category-card'>";
+                echo "  <div>";
+                echo "    <div style='font-size: 13px; font-weight: 600; color: var(--color-ink);'>" . htmlspecialchars($rowcate["name_category"]) . "</div>";
+                echo "    <div style='font-size: 11px; color: var(--color-muted); font-family: monospace;'>ID: #" . htmlspecialchars($rowcate["id_category"]) . "</div>";
+                echo "  </div>";
+                echo "  <button class='btn-icon-cell delete' title='Xóa' onclick='xoaCategory(\"" . $rowcate["id_category"] . "\")'><i class='bi bi-trash'></i></button>";
+                echo "</div>";
               }
-              ?>
-
-            </div>
+            } else {
+              echo "<p class='text-muted p-3'>Chưa có loại tài sản nào.</p>";
+            }
+            ?>
           </div>
-          <div>
-            <button class=" m-3 btn btn-primary" onclick="themtaisanmoi(2)">
-              Thêm
+        </div>
+      </section>
+
+      <!-- Groups -->
+      <section class="content-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2 class="panel-title">Nhóm tài sản (Groups)</h2>
+            <?php
+            $kqgroup = $conn->query("SELECT * FROM group_product");
+            $g_count = $kqgroup ? $kqgroup->num_rows : 0;
+            ?>
+            <span class="panel-counter"><?php echo $g_count; ?> nhóm</span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-quiet btn-accent" data-bs-toggle="modal" data-bs-target="#modalAddGroup">
+              <i class="bi bi-plus-lg"></i>
+              <span>Thêm nhóm</span>
             </button>
           </div>
         </div>
 
-        <div class=" card mt-4">
-          <div class="card-body">
-            <h2 class="card-title mb-4">Các danh mục tài sản hiện có </h2>
-            <div class="d-flex flex-wrap gap-3">
-              <?php
-              $product = "select * from `product` ";
-              $kqproduct = $conn->query($product);
-              if ($kqproduct->num_rows > 0) {
-                while ($rowproduct = $kqproduct->fetch_assoc()) {
-                  echo "<div class='card' style='width: 12rem;'>";
-                  echo "<div class='card-body'>";
-                  echo "<ul class='list-group list-group-flush'>";
-                  echo  "<li class='list-group-item'>ID: " . htmlspecialchars($rowproduct["id_product"]) . "</li>";
-                  echo  "<li class='list-group-item'>Name: " . htmlspecialchars($rowproduct["name_product"]) . "</li>";
-                  echo "</ul>";
-                  echo "</div>";
-                  echo "<button class='btn btn-outline-danger btn-sm col-md-4 ms-2 mb-2' onclick='xoa(\"" . $rowcate["barcode"] . "\")'>
-                      <i class='bi bi-trash-fill'></i>
-                        </button>";
-                  echo "</div>";
-                }
-              } else {
-                echo "<p>Không có loại tài sản nào!</p>";
+        <div class="p-3">
+          <div class="category-grid">
+            <?php
+            if ($kqgroup && $kqgroup->num_rows > 0) {
+              while ($rowg = $kqgroup->fetch_assoc()) {
+                echo "<div class='category-card'>";
+                echo "  <div>";
+                echo "    <div style='font-size: 13px; font-weight: 600; color: var(--color-ink);'>" . htmlspecialchars($rowg["name_group"]) . "</div>";
+                echo "    <div style='font-size: 11px; color: var(--color-muted); font-family: monospace;'>ID: #" . htmlspecialchars($rowg["id_group"]) . "</div>";
+                echo "  </div>";
+                echo "  <button class='btn-icon-cell delete' title='Xóa' onclick='xoaGroup(\"" . $rowg["id_group"] . "\")'><i class='bi bi-trash'></i></button>";
+                echo "</div>";
               }
-              ?>
-            </div>
-          </div>
-          <div>
-            <button class=" m-3 btn btn-primary" onclick=" themtaisanmoi(3) ">
-              Thêm
-            </button>
+            }
+            ?>
           </div>
         </div>
+      </section>
+    </main>
+  </div>
 
-        <main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal Thêm Loại -->
+  <div class="modal fade modalcao" id="modalAddCategory" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 12px; border: 1px solid var(--color-line); box-shadow: var(--shadow-dropdown);">
+        <div class="modal-header py-3 px-4" style="border-bottom: 1px solid var(--color-line);">
+          <h6 class="modal-title fw-bold" style="font-size: 14px;">Thêm loại tài sản mới</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="../actions/them/themloai.php" method="POST">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label" style="font-size: 13px; font-weight: 500;">Tên loại tài sản</label>
+              <input type="text" name="name_category" class="input-compact w-100" placeholder="Ví dụ: Máy tính bảng, Bàn làm việc..." required>
+            </div>
+          </div>
+          <div class="modal-footer py-2 px-4" style="border-top: 1px solid var(--color-line);">
+            <button type="button" class="btn-quiet" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn-quiet btn-accent">Lưu loại</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Thêm Nhóm -->
+  <div class="modal fade modalcao" id="modalAddGroup" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 12px; border: 1px solid var(--color-line); box-shadow: var(--shadow-dropdown);">
+        <div class="modal-header py-3 px-4" style="border-bottom: 1px solid var(--color-line);">
+          <h6 class="modal-title fw-bold" style="font-size: 14px;">Thêm nhóm tài sản mới</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="../actions/them/themnhom.php" method="POST">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label" style="font-size: 13px; font-weight: 500;">Tên nhóm tài sản</label>
+              <input type="text" name="name_group" class="input-compact w-100" placeholder="Ví dụ: Điện tử, Thiết bị văn phòng..." required>
+            </div>
+          </div>
+          <div class="modal-footer py-2 px-4" style="border-top: 1px solid var(--color-line);">
+            <button type="button" class="btn-quiet" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn-quiet btn-accent">Lưu nhóm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function xoaCategory(id) {
+      if (confirm('Bạn có chắc muốn xóa loại này?')) {
+        window.location.href = `../actions/delete/xoaloai.php?id=${id}`;
+      }
+    }
+    function xoaGroup(id) {
+      if (confirm('Bạn có chắc muốn xóa nhóm này?')) {
+        window.location.href = `../actions/delete/xoanhom.php?id=${id}`;
+      }
+    }
+  </script>
 </body>
-<script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<div class="modal fade" id="modalthem" tabindex="-1" aria-labelledby="modalthem" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="modalbodythem">
-        <!-- sau nay se duoc them vao bang js ben duoi -->
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">dangload</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- toast -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
-    aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="toastbd">
-        <?php echo $toastthanhcong; ?>
-      </div>
-      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
-<!-- modalXoa -->
-<div class="modal fade" id="modalXoa" tabindex="-1" aria-labelledby="modalXoaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalXoaLabel">Xác nhận xóa</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <h4>Bạn có chắc chắn muốn xóa không?</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-        <button type="button" class="btn btn-danger" id="btnXacNhanXoa">Đồng ý</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
-  //goi modal them cac loai tai san
-  function themtaisanmoi(id) {
-    var myModal = new bootstrap.Modal(document.getElementById('modalthem'));
-    myModal.show();
-    var link
-    switch (id) {
-      case 1:
-        link = ("../actions/them/themloaitaisan.php");
-        break;
-      case 2:
-        link = ("../actions/them/themnhomtaisan.php");
-        break;
-      case 3:
-        link = ("../actions/them/themdanhmuctaisan.php");
-        break;
-      default:
-        console.log("khoong thay");
-        return;
-    }
-    fetch(link)
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById("modalbodythem").innerHTML = data;
-      })
-      .catch(error => {
-        console.log(error)
-        document.getElementById("modalbodythem").innerHTML = '<p class="text-danger">Lỗi</p>';
-      });
-  }
-  // hien thi  toast 
-  document.addEventListener('DOMContentLoaded', function() {
-    var toast = document.getElementById('toast');
-    if (toast.innerText.trim() !== "") {
-      var toast = new bootstrap.Toast(toast);
-      toast.show();
-    }
-  });
-
-
-  let tscanxoa = null;
-
-  function xoa(id) {
-    tscanxoa = id; // luu vao bien nay 
-    var myModal = new bootstrap.Modal(document.getElementById('modalXoa'));
-    myModal.show();
-  }
-
-
-  document.getElementById("btnXacNhanXoa").addEventListener("click", function() {
-    if (tscanxoa) {
-      fetch(`../actions/delete/xoa_all.php?id=${tscanxoa}`)
-        .then(AuthenticatorAssertionResponse => response.text()) //lay du lieu xoa
-        .then(data => {
-          console.log(data);
-
-          // toast xoa
-          var toast = document.getElementById('toast');
-          var toastBody = document.getElementById('toastbd');
-          toastBody.innerHTML = "Xóa thành công";
-          var toast = new bootstrap.Toast(toast);
-          toast.show();
-
-          // an modal
-          var modal = bootstrap.Modal.getInstance(document.getElementById('modalXoa'));
-          if (modal) modal.hide();
-
-          setTimeout(() => {
-            location.reload();
-          }, 1500);
-        })
-        .catch(error => {
-          console.error("Lỗi:", error);
-        });
-    }
-  });
-</script>
-
 </html>
